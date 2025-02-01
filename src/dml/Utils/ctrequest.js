@@ -6,7 +6,7 @@ let downloadLoadingInstance;
 // 是否显示重新登录
 export let isRelogin = { show: false };
 
-axios.defaults.headers['Content-Type'] = 'application/x-www-form-urlencoded'
+axios.defaults.headers['Content-Type'] = 'application/x-www-form-urlencoded; charset=utf-8'
 // 创建axios实例
 const service = axios.create({
   // axios中请求配置有baseURL选项，表示请求URL公共部分
@@ -327,7 +327,7 @@ export function download(url, params, filename, config) {
   downloadLoadingInstance = ElLoading.service({ text: "正在下载数据，请稍候", background: "rgba(0, 0, 0, 0.7)", })
   return service.post(url, params, {
     transformRequest: [(params) => { return tansParams(params) }],
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8' },
     responseType: 'blob',
     ...config
   }).then(async (data) => {

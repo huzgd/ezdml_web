@@ -28,6 +28,10 @@ const execCmd_dmlGraph=(cmd,par1,par2)=>{
   let res=dmlCanvas.execCmd(cmd,par1,par2);
   if(res)
     return res;
+  if(cmd=='reloadDmlGraph'){
+    reloadDmlGraph();
+    return true;
+  }
 }
 
 const onEmitEvent_dmlGraph=(evt,par1,par2)=>{

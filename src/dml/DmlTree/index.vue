@@ -143,6 +143,8 @@ const dmlTree_EventLsr=(evt,par1,par2)=>{
     par1=[par1];
     evt='newDmlTables';
   }
+  if(evt=='newModelTables')
+    evt='newDmlTables';
   if(evt=='newDmlTables'){
     var bFound=false;
     treeData.forEach(mNode=>{
@@ -286,6 +288,16 @@ const onNodeContextmenu=(event, data, node)=>{
   dmlData.emitEvent('dmlTreeContextMenu', data, event);
   event.preventDefault();
 }
+
+watch(()=>dmlData.curModelName, ()=>{
+  nextTick(()=>{
+    if(dmlData.curModel && treeRef.value.getCurrentKey()!=dmlData.curModel.ID){
+      treeRef.value.setCurrentKey(dmlData.curModel.ID);
+    }
+  });
+});
+
+
 </script>
   
 

@@ -28,6 +28,7 @@
                 <el-dropdown-menu>
                   <el-dropdown-item @click="_execCmd('menu_action','loadFile')">本地磁盘文件</el-dropdown-item>
                   <el-dropdown-item @click="_execCmd('menu_action','onlineFiles')">在线文件</el-dropdown-item>
+                  <el-dropdown-item @click="_execCmd('menu_action','showDmlImpDDL')">导入数据库DDL</el-dropdown-item>
                 </el-dropdown-menu>
               </template>
             </el-dropdown>
@@ -38,10 +39,23 @@
                   <el-dropdown-item @click="_execCmd('menu_action','saveFile')">本地磁盘文件</el-dropdown-item>
                   <el-dropdown-item @click="_execCmd('menu_action','onlineFiles',true)">在线文件</el-dropdown-item>
                   <el-dropdown-item @click="_execCmd('menu_action','exportImage')">保存图像</el-dropdown-item>
+                  <el-dropdown-item @click="_execCmd('menu_action','showDmlGenDDL')">生成数据库DDL</el-dropdown-item>
                 </el-dropdown-menu>
               </template>
             </el-dropdown>
             <el-dropdown-item @click="_execCmd('menu_action','shareModels')">分享</el-dropdown-item>
+            <el-dropdown style="width: 100%;">
+              <span class="el-dropdown-menu__item" style="width: 100%;">AI辅助</span>
+              <template #dropdown>
+                <el-dropdown-menu>
+                  <el-dropdown-item @click="_execCmd('menu_action','AICmd_GenNewModel')">生成新模型</el-dropdown-item>
+                  <el-dropdown-item @click="_execCmd('menu_action','AICmd_AddMoreTables',true)">增加表</el-dropdown-item>
+                  <el-dropdown-item @click="_execCmd('menu_action','AICmd_AddMoreFields')">增加字段</el-dropdown-item>
+                  <el-dropdown-item @click="_execCmd('menu_action','AICmd_GenComments')">生成注释</el-dropdown-item>
+                  <el-dropdown-item @click="_execCmd('menu_action','AICmd_GenFKLinks')">生成外键连接</el-dropdown-item>
+                </el-dropdown-menu>
+              </template>
+            </el-dropdown>
             <el-dropdown-item @click="_execCmd('toogleShowPhyField')" :divided="true">切换视图</el-dropdown-item>
             <el-dropdown-item @click="_execCmd('bestFitOrReset')">缩放至全部/复原</el-dropdown-item>
             <el-dropdown-item @click="_execCmd('menu_action','showSelectedProp')" :disabled="!dmlData.selectedCount">对象属性</el-dropdown-item>
@@ -72,6 +86,7 @@
             <el-dropdown-item @click="_execCmd('menu_action','saveFile')">本地磁盘文件</el-dropdown-item>
             <el-dropdown-item @click="_execCmd('menu_action','onlineFiles',true)">在线文件</el-dropdown-item>
             <el-dropdown-item @click="_execCmd('menu_action','exportImage')">保存图像</el-dropdown-item>
+            <el-dropdown-item @click="_execCmd('menu_action','showDmlGenDDL')">生成数据库DDL</el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </el-dropdown>
@@ -102,6 +117,7 @@
             <el-dropdown-item @click="_execCmd('bestFitOrReset')">缩放至全部/复原</el-dropdown-item>
             <el-dropdown-item @click="_execCmd('menu_action','newFile')">清空</el-dropdown-item>
             <el-dropdown-item @click="showHelp" :divide="true">操作说明</el-dropdown-item>
+            <el-dropdown-item @click="_execCmd('menu_action','openEzdmlGithubSrc')">Github源码</el-dropdown-item>
             <el-dropdown-item @click="_execCmd('menu_action','openEzdmlDownload')">下载EZDML桌面版</el-dropdown-item>
             <el-dropdown-item @click="_execCmd('menu_action','openEzdmlHome')">打开EZDML首页</el-dropdown-item>
           </el-dropdown-menu>
@@ -116,7 +132,7 @@
 
 import { ref, onMounted, onBeforeUnmount, useAttrs, watch, nextTick } from 'vue'
 import {gDmlLogoSrc} from '../DmlData/DmlIcons'
-import { Search, Fold, ZoomIn, ZoomOut,FolderOpened,Suitcase,Share,View} from '@element-plus/icons-vue'
+import { Search, Fold, ZoomIn, ZoomOut,FolderOpened,Suitcase,Share,Cpu,View} from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
 const dmlData = useAttrs()['dmlData'] || {};

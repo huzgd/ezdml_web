@@ -3,868 +3,23 @@ export const TestDmj703=
   "RootName": "DataModels",
   "CTVER": "43543338",
   "TableCount": 43,
-  "Count": 3,
+  "Count": 2,
   "items": [
-    {
-      "ID": 13,
-      "Name": "Welcome",
-      "Caption": "欢迎",
-      "CreateDate": "2020-03-14 23:46:50",
-      "OrderNo": 1,
-      "CustomAttr1": "DVS:-57.00,-920.00,1.00,0,",
-      "Tables": {
-        "Count": 6,
-        "items": [
-          {
-            "ID": 27,
-            "Name": "欢迎文本",
-            "TypeName": "TEXT",
-            "Memo": " _    _      _                                     \r\n| |  | |    | |                           _        \r\n| |  | | ___| | ___ ___  _ __ ___   ___  | |_ ___  \r\n| |/\\| |/ _ \\ |/ __/ _ \\| '_ ` _ \\ / _ \\ | __/ _ \\ \r\n\\  /\\  /  __/ | (_| (_) | | | | | |  __/ | || (_) |\r\n \\/  \\/ \\___|_|\\___\\___/|_| |_| |_|\\___|  \\__\\___/ \r\n  _____ ______________  ___ _                      \r\n |  ___|___  /  _  \\  \\/  || |                     \r\n | |__    / /| | | | .  . || |                     \r\n |  __|  / / | | | | |\\/| || |                     \r\n | |___./ /__| |/ /| |  | || |____                 \r\n \\____/\\_____/___/ \\_|  |_/\\_____/                 \r\n                                                   \r\n                                                   \r\n欢迎使用EZDML Web版！\r\n\r\n.支持在线查看模型并进行简单的设计\r\n.在线分享模型设计，可将模型数据加密后分享\r\n.支持手机、平板、电脑等主流浏览器\r\n.与EZDML桌面版格式兼容，可互相复制粘贴数据\r\n\r\n这是一个DEMO演示文件！更多高级功能，请下载EZDML桌面版体验",
-            "CreateDate": "2024-08-08 16:20:49",
-            "OrderNo": 1,
-            "GraphDesc": "Left=28.00\r\nTop=22.00\r\nWidth=528.00\r\nHeight=370.00\r\nAutoSize=0",
-            "BgColor": 16777215,
-            "MetaFields": {"items": []}
-          },
-          {
-            "ID": 1,
-            "Name": "TCtDataModelGraphList",
-            "Caption": "模型图列表",
-            "CreateDate": "2019-10-31 23:29:36",
-            "OrderNo": 2,
-            "GraphDesc": "Left=30.00\r\nTop=425.00",
-            "BgColor": 16764108,
-            "MetaFields": {
-              "Count": 7,
-              "items": [
-                {
-                  "ID": 56,
-                  "Name": "Id",
-                  "OrderNo": 1,
-                  "DisplayName": "编号",
-                  "DataType": 1,
-                  "KeyFieldType": 1
-                },
-                {
-                  "ID": 23,
-                  "Name": "LoadFromFile",
-                  "OrderNo": 2,
-                  "DisplayName": "加载文件",
-                  "DataType": 11
-                },
-                {
-                  "ID": 24,
-                  "Name": "SaveToFile",
-                  "OrderNo": 3,
-                  "DisplayName": "保存到文件",
-                  "DataType": 11
-                },
-                {
-                  "ID": 27,
-                  "Name": "CurDataModel",
-                  "OrderNo": 4,
-                  "DisplayName": "当前模型",
-                  "DataType": 8
-                },
-                {
-                  "ID": 26,
-                  "Name": "NewModelItem",
-                  "OrderNo": 5,
-                  "DisplayName": "创建新的模型",
-                  "DataType": 11
-                },
-                {
-                  "ID": 7,
-                  "Name": "Count",
-                  "OrderNo": 6,
-                  "DisplayName": "数量",
-                  "DataType": 2
-                },
-                {
-                  "ID": 6,
-                  "Name": "Items",
-                  "OrderNo": 7,
-                  "DisplayName": "模型项",
-                  "DataType": 1,
-                  "DataTypeName": "LI"
-                }
-              ]
-            }
-          },
-          {
-            "ID": 2,
-            "Name": "TCtDataModelGraph",
-            "Caption": "模型图",
-            "CreateDate": "2019-10-31 23:37:15",
-            "OrderNo": 3,
-            "GraphDesc": "Left=44.00\r\nTop=610.00",
-            "BgColor": 16772863,
-            "MetaFields": {
-              "Count": 10,
-              "items": [
-                {
-                  "ID": 1,
-                  "Name": "Id",
-                  "OrderNo": 1,
-                  "DisplayName": "编号",
-                  "DataType": 2,
-                  "KeyFieldType": 1
-                },
-                {
-                  "ID": 49,
-                  "Name": "Rid",
-                  "OrderNo": 2,
-                  "DisplayName": "所属模型列表",
-                  "DataType": 1
-                },
-                {
-                  "ID": 4,
-                  "Name": "Name",
-                  "OrderNo": 3,
-                  "DisplayName": "名称",
-                  "DataType": 1
-                },
-                {
-                  "ID": 33,
-                  "Name": "DisplayName",
-                  "OrderNo": 4,
-                  "DisplayName": "显示名称",
-                  "DataType": 1
-                },
-                {
-                  "ID": 34,
-                  "Name": "GraphWidth",
-                  "OrderNo": 5,
-                  "DisplayName": "图形区宽度",
-                  "DataType": 2
-                },
-                {
-                  "ID": 35,
-                  "Name": "GraphHeight",
-                  "OrderNo": 6,
-                  "DisplayName": "图形区高度",
-                  "DataType": 2
-                },
-                {
-                  "ID": 36,
-                  "Name": "DefDbEngine",
-                  "OrderNo": 7,
-                  "DisplayName": "缺省数据连接",
-                  "DataType": 1
-                },
-                {
-                  "ID": 37,
-                  "Name": "DbConnectStr",
-                  "OrderNo": 8,
-                  "DisplayName": "数据连接名",
-                  "DataType": 1
-                },
-                {
-                  "ID": 38,
-                  "Name": "ConfigStr",
-                  "OrderNo": 9,
-                  "DisplayName": "选项设置串",
-                  "DataType": 1,
-                  "RelateTable": "TCtDataModelGraphList",
-                  "RelateField": "{Link:Direct}",
-                  "GraphDesc": "P1=151.00,559.00\r\nP2=151.00,584.00\r\nP3=151.00,584.00\r\nP4=151.00,610.00\r\nHookP1=121.00,114.00\r\nHookP2=107.00,20.00\r\nMod_OP1=0\r\nMod_OP2=0\r\nMod_CP=0\r\nHorz1=0\r\nHorz2=0"
-                },
-                {
-                  "ID": 39,
-                  "Name": "Tables",
-                  "OrderNo": 10,
-                  "DisplayName": "数据表",
-                  "DataType": 10
-                }
-              ]
-            }
-          },
-          {
-            "ID": 3,
-            "Name": "TCtMetaTable",
-            "Caption": "数据表",
-            "CreateDate": "2019-10-31 23:42:15",
-            "OrderNo": 4,
-            "GraphDesc": "Left=350.00\r\nTop=445.00",
-            "BgColor": 15663086,
-            "MetaFields": {
-              "Count": 19,
-              "items": [
-                {
-                  "ID": 96,
-                  "Name": "Id",
-                  "OrderNo": 1,
-                  "DisplayName": "编号",
-                  "DataType": 1,
-                  "KeyFieldType": 1
-                },
-                {
-                  "ID": 132,
-                  "Name": "Rid",
-                  "OrderNo": 2,
-                  "DisplayName": "所属模型",
-                  "DataType": 1,
-                  "KeyFieldType": 3,
-                  "RelateTable": "TCtDataModelGraph",
-                  "RelateField": "Id",
-                  "GraphDesc": "P1=258.00,690.00\r\nP2=304.00,690.00\r\nP3=304.00,690.00\r\nP4=350.00,690.00\r\nHookP1=186.00,80.00\r\nHookP2=28.00,245.00\r\nMod_OP1=0\r\nMod_OP2=0\r\nMod_CP=0\r\nHorz1=1\r\nHorz2=1"
-                },
-                {
-                  "ID": 98,
-                  "Name": "Name",
-                  "OrderNo": 3,
-                  "DisplayName": "名称",
-                  "DataType": 1
-                },
-                {
-                  "ID": 12,
-                  "Name": "UIDisplayText",
-                  "OrderNo": 4,
-                  "DisplayName": "界面显示名",
-                  "DataType": 1
-                },
-                {
-                  "ID": 116,
-                  "Name": "TypeName",
-                  "OrderNo": 5,
-                  "DisplayName": "类型",
-                  "DataType": 1
-                },
-                {
-                  "ID": 13,
-                  "Name": "GenDatabase",
-                  "OrderNo": 6,
-                  "DisplayName": "是否生成数据库",
-                  "DataType": 5
-                },
-                {
-                  "ID": 14,
-                  "Name": "GenCode",
-                  "OrderNo": 7,
-                  "DisplayName": "是否生成代码",
-                  "DataType": 5
-                },
-                {
-                  "ID": 117,
-                  "Name": "Describe",
-                  "OrderNo": 8,
-                  "DisplayName": "描述字",
-                  "DataType": 1
-                },
-                {
-                  "ID": 15,
-                  "Name": "ExtraSQL",
-                  "OrderNo": 9,
-                  "DisplayName": "额外的数据库SQL",
-                  "DataType": 1
-                },
-                {
-                  "ID": 16,
-                  "Name": "UILogic",
-                  "OrderNo": 10,
-                  "DisplayName": "前端界面逻辑",
-                  "DataType": 1
-                },
-                {
-                  "ID": 17,
-                  "Name": "BusinessLogic",
-                  "OrderNo": 11,
-                  "DisplayName": "后端业务逻辑",
-                  "DataType": 1
-                },
-                {
-                  "ID": 18,
-                  "Name": "ExtraProps",
-                  "OrderNo": 12,
-                  "DisplayName": "扩展属性",
-                  "DataType": 1
-                },
-                {
-                  "ID": 120,
-                  "Name": "GraphDesc",
-                  "OrderNo": 13,
-                  "DisplayName": "图形描述",
-                  "DataType": 1
-                },
-                {
-                  "ID": 121,
-                  "Name": "ScriptRules",
-                  "OrderNo": 14,
-                  "DisplayName": "脚本配置",
-                  "DataType": 1
-                },
-                {
-                  "ID": 122,
-                  "Name": "CustomConfigs",
-                  "OrderNo": 15,
-                  "DisplayName": "自定义配置",
-                  "DataType": 1
-                },
-                {
-                  "ID": 118,
-                  "Name": "MetaFields",
-                  "OrderNo": 16,
-                  "DisplayName": "字段列表",
-                  "DataType": 10
-                },
-                {
-                  "ID": 119,
-                  "Name": "Memo",
-                  "OrderNo": 17,
-                  "DisplayName": "备注",
-                  "DataType": 1
-                },
-                {
-                  "ID": 143,
-                  "Name": "GenSql",
-                  "OrderNo": 18,
-                  "DisplayName": "生成SQL",
-                  "DataType": 11
-                },
-                {
-                  "ID": 19,
-                  "Name": "JsonStr",
-                  "OrderNo": 19,
-                  "DisplayName": "表JSON字符串",
-                  "DataType": 11
-                }
-              ]
-            }
-          },
-          {
-            "ID": 4,
-            "Name": "TCtMetaField",
-            "Caption": "数据字段",
-            "CreateDate": "2019-10-31 23:48:04",
-            "OrderNo": 5,
-            "GraphDesc": "Left=697.00\r\nTop=367.00",
-            "BgColor": 15663103,
-            "MetaFields": {
-              "Count": 69,
-              "items": [
-                {
-                  "ID": 260,
-                  "Name": "Id",
-                  "OrderNo": 1,
-                  "DisplayName": "编号",
-                  "DataType": 1,
-                  "KeyFieldType": 1
-                },
-                {
-                  "ID": 261,
-                  "Name": "Rid",
-                  "OrderNo": 2,
-                  "DisplayName": "所属表",
-                  "DataType": 1,
-                  "KeyFieldType": 3,
-                  "RelateTable": "TCtMetaTable",
-                  "RelateField": "Id",
-                  "GraphDesc": "P1=609.00,608.00\r\nP2=653.00,608.00\r\nP3=653.00,608.00\r\nP4=697.00,608.00\r\nHookP1=239.00,163.00\r\nHookP2=20.00,241.00\r\nMod_OP1=0\r\nMod_OP2=0\r\nMod_CP=0\r\nHorz1=1\r\nHorz2=1"
-                },
-                {
-                  "ID": 262,
-                  "Name": "Name",
-                  "OrderNo": 3,
-                  "DisplayName": "名称",
-                  "DataType": 1
-                },
-                {
-                  "ID": 263,
-                  "Name": "DisplayName",
-                  "OrderNo": 4,
-                  "DisplayName": "显示名称",
-                  "DataType": 1
-                },
-                {
-                  "ID": 264,
-                  "Name": "DataType",
-                  "OrderNo": 5,
-                  "DisplayName": "数据类型",
-                  "DataType": 6
-                },
-                {
-                  "ID": 265,
-                  "Name": "DataTypeName",
-                  "OrderNo": 6,
-                  "DisplayName": "数据类型",
-                  "DataType": 1
-                },
-                {
-                  "ID": 266,
-                  "Name": "KeyFieldType",
-                  "OrderNo": 7,
-                  "DisplayName": "关键字段类型",
-                  "DataType": 6
-                },
-                {
-                  "ID": 267,
-                  "Name": "RelateTable",
-                  "OrderNo": 8,
-                  "DisplayName": "关联表",
-                  "DataType": 1
-                },
-                {
-                  "ID": 268,
-                  "Name": "RelateField",
-                  "OrderNo": 9,
-                  "DisplayName": "关联字段",
-                  "DataType": 1
-                },
-                {
-                  "ID": 269,
-                  "Name": "IndexType",
-                  "OrderNo": 10,
-                  "DisplayName": "索引类型",
-                  "DataType": 6
-                },
-                {
-                  "ID": 48,
-                  "Name": "IndexFields",
-                  "OrderNo": 11,
-                  "DisplayName": "索引字段",
-                  "DataType": 1
-                },
-                {
-                  "ID": 49,
-                  "Name": "DBCheck",
-                  "OrderNo": 12,
-                  "DisplayName": "数据库检查",
-                  "DataType": 1
-                },
-                {
-                  "ID": 270,
-                  "Name": "Hint",
-                  "OrderNo": 13,
-                  "DisplayName": "提示",
-                  "DataType": 1
-                },
-                {
-                  "ID": 50,
-                  "Name": "ExplainText",
-                  "OrderNo": 14,
-                  "DisplayName": "说明文字",
-                  "DataType": 1
-                },
-                {
-                  "ID": 271,
-                  "Name": "Memo",
-                  "OrderNo": 15,
-                  "DisplayName": "备注",
-                  "DataType": 1
-                },
-                {
-                  "ID": 272,
-                  "Name": "DefaultValue",
-                  "OrderNo": 16,
-                  "DisplayName": "缺省值",
-                  "DataType": 1
-                },
-                {
-                  "ID": 273,
-                  "Name": "Nullable",
-                  "OrderNo": 17,
-                  "DisplayName": "是否可为空",
-                  "DataType": 5
-                },
-                {
-                  "ID": 274,
-                  "Name": "DataLength",
-                  "OrderNo": 18,
-                  "DisplayName": "最大长度",
-                  "DataType": 2
-                },
-                {
-                  "ID": 275,
-                  "Name": "Url",
-                  "OrderNo": 19,
-                  "DisplayName": "链接",
-                  "DataType": 1
-                },
-                {
-                  "ID": 276,
-                  "Name": "ResType",
-                  "OrderNo": 20,
-                  "DisplayName": "资源类型",
-                  "DataType": 1
-                },
-                {
-                  "ID": 277,
-                  "Name": "Formula",
-                  "OrderNo": 21,
-                  "DisplayName": "公式",
-                  "DataType": 1
-                },
-                {
-                  "ID": 278,
-                  "Name": "FormulaCondition",
-                  "OrderNo": 22,
-                  "DisplayName": "公式条件",
-                  "DataType": 1
-                },
-                {
-                  "ID": 279,
-                  "Name": "AggregateFun",
-                  "OrderNo": 23,
-                  "DisplayName": "汇总函数",
-                  "DataType": 1
-                },
-                {
-                  "ID": 280,
-                  "Name": "MeasureUnit",
-                  "OrderNo": 24,
-                  "DisplayName": "计量单位",
-                  "DataType": 1
-                },
-                {
-                  "ID": 281,
-                  "Name": "ValidateRule",
-                  "OrderNo": 25,
-                  "DisplayName": "字段值检查规则",
-                  "DataType": 1
-                },
-                {
-                  "ID": 282,
-                  "Name": "EditorType",
-                  "OrderNo": 26,
-                  "DisplayName": "编辑器类型",
-                  "DataType": 1
-                },
-                {
-                  "ID": 283,
-                  "Name": "LabelText",
-                  "OrderNo": 27,
-                  "DisplayName": "标签文字",
-                  "DataType": 1
-                },
-                {
-                  "ID": 284,
-                  "Name": "EditorReadOnly",
-                  "OrderNo": 28,
-                  "DisplayName": "编辑器是否只读",
-                  "DataType": 5
-                },
-                {
-                  "ID": 285,
-                  "Name": "EditorEnabled",
-                  "OrderNo": 29,
-                  "DisplayName": "编辑器是否激活",
-                  "DataType": 5
-                },
-                {
-                  "ID": 286,
-                  "Name": "DisplayFormat",
-                  "OrderNo": 30,
-                  "DisplayName": "显示格式",
-                  "DataType": 1
-                },
-                {
-                  "ID": 287,
-                  "Name": "EditFormat",
-                  "OrderNo": 31,
-                  "DisplayName": "输入格式",
-                  "DataType": 1
-                },
-                {
-                  "ID": 288,
-                  "Name": "FontName",
-                  "OrderNo": 32,
-                  "DisplayName": "字体名称",
-                  "DataType": 1
-                },
-                {
-                  "ID": 289,
-                  "Name": "FontSize",
-                  "OrderNo": 33,
-                  "DisplayName": "字体大小",
-                  "DataType": 3
-                },
-                {
-                  "ID": 290,
-                  "Name": "FontStyle",
-                  "OrderNo": 34,
-                  "DisplayName": "字体样式",
-                  "DataType": 2
-                },
-                {
-                  "ID": 291,
-                  "Name": "ForeColor",
-                  "OrderNo": 35,
-                  "DisplayName": "前景颜色",
-                  "DataType": 2
-                },
-                {
-                  "ID": 292,
-                  "Name": "BackColor",
-                  "OrderNo": 36,
-                  "DisplayName": "背景颜色",
-                  "DataType": 2
-                },
-                {
-                  "ID": 293,
-                  "Name": "DropDownItems",
-                  "OrderNo": 37,
-                  "DisplayName": "下拉列表",
-                  "DataType": 1
-                },
-                {
-                  "ID": 294,
-                  "Name": "DropDownMode",
-                  "OrderNo": 38,
-                  "DisplayName": "下拉模式",
-                  "DataType": 6
-                },
-                {
-                  "ID": 190,
-                  "Name": "Visibility",
-                  "OrderNo": 39,
-                  "DisplayName": "显示级别",
-                  "DataType": 2
-                },
-                {
-                  "ID": 191,
-                  "Name": "TextAlign",
-                  "OrderNo": 40,
-                  "DisplayName": "文字对齐",
-                  "DataType": 6
-                },
-                {
-                  "ID": 192,
-                  "Name": "ColWidth",
-                  "OrderNo": 41,
-                  "DisplayName": "列宽",
-                  "DataType": 2
-                },
-                {
-                  "ID": 193,
-                  "Name": "MaxLength",
-                  "OrderNo": 42,
-                  "DisplayName": "最大长度",
-                  "DataType": 2
-                },
-                {
-                  "ID": 194,
-                  "Name": "Searchable",
-                  "OrderNo": 43,
-                  "DisplayName": "是否可搜索",
-                  "DataType": 5
-                },
-                {
-                  "ID": 195,
-                  "Name": "Queryable",
-                  "OrderNo": 44,
-                  "DisplayName": "是否可查询",
-                  "DataType": 5
-                },
-                {
-                  "ID": 196,
-                  "Name": "InitValue",
-                  "OrderNo": 45,
-                  "DisplayName": "初始值",
-                  "DataType": 1
-                },
-                {
-                  "ID": 199,
-                  "Name": "ValueFormat",
-                  "OrderNo": 46,
-                  "DisplayName": "值格式类型",
-                  "DataType": 1
-                },
-                {
-                  "ID": 197,
-                  "Name": "ValueMin",
-                  "OrderNo": 47,
-                  "DisplayName": "最小值",
-                  "DataType": 1
-                },
-                {
-                  "ID": 198,
-                  "Name": "ValueMax",
-                  "OrderNo": 48,
-                  "DisplayName": "最大值",
-                  "DataType": 1
-                },
-                {
-                  "ID": 51,
-                  "Name": "IsHidden",
-                  "OrderNo": 49,
-                  "DisplayName": "是否隐藏",
-                  "DataType": 5
-                },
-                {
-                  "ID": 52,
-                  "Name": "HideOnList",
-                  "Memo": "是否在列表中默认隐藏（可手工选择显示）",
-                  "OrderNo": 50,
-                  "DisplayName": "列表中隐藏",
-                  "DataType": 1
-                },
-                {
-                  "ID": 53,
-                  "Name": "HideOnEdit",
-                  "OrderNo": 51,
-                  "DisplayName": "编辑时隐藏",
-                  "DataType": 5
-                },
-                {
-                  "ID": 54,
-                  "Name": "HideOnView",
-                  "OrderNo": 52,
-                  "DisplayName": "查看时隐藏",
-                  "DataType": 5
-                },
-                {
-                  "ID": 55,
-                  "Name": "EditorProps",
-                  "OrderNo": 53,
-                  "DisplayName": "其它编辑器属性",
-                  "DataType": 1
-                },
-                {
-                  "ID": 56,
-                  "Name": "SheetGroup",
-                  "OrderNo": 54,
-                  "DisplayName": "表单分组",
-                  "DataType": 1
-                },
-                {
-                  "ID": 57,
-                  "Name": "ColGroup",
-                  "OrderNo": 55,
-                  "DisplayName": "列表头分组",
-                  "DataType": 1
-                },
-                {
-                  "ID": 58,
-                  "Name": "FixColType",
-                  "OrderNo": 56,
-                  "DisplayName": "冻结列类型",
-                  "DataType": 6
-                },
-                {
-                  "ID": 59,
-                  "Name": "AutoMerge",
-                  "OrderNo": 57,
-                  "DisplayName": "自动合并列",
-                  "DataType": 5
-                },
-                {
-                  "ID": 60,
-                  "Name": "ShowFilterBox",
-                  "OrderNo": 58,
-                  "DisplayName": "显示列过滤钮",
-                  "DataType": 5
-                },
-                {
-                  "ID": 61,
-                  "Name": "ColSortable",
-                  "OrderNo": 59,
-                  "DisplayName": "显示列排序钮",
-                  "DataType": 5
-                },
-                {
-                  "ID": 62,
-                  "Name": "DropDownSQL",
-                  "OrderNo": 60,
-                  "DisplayName": "下拉SQL",
-                  "DataType": 1
-                },
-                {
-                  "ID": 63,
-                  "Name": "ItemColCount",
-                  "Memo": "对复选列表、单选列表、按钮列表等有效",
-                  "OrderNo": 61,
-                  "DisplayName": "每行分几列",
-                  "DataType": 2
-                },
-                {
-                  "ID": 64,
-                  "Name": "TextClipSize",
-                  "Memo": "多行文本，显示“更多”按钮",
-                  "OrderNo": 62,
-                  "DisplayName": "裁剪内容长度",
-                  "DataType": 2
-                },
-                {
-                  "ID": 65,
-                  "Name": "Required",
-                  "OrderNo": 63,
-                  "DisplayName": "必填",
-                  "DataType": 5
-                },
-                {
-                  "ID": 66,
-                  "Name": "AutoTrim",
-                  "OrderNo": 64,
-                  "DisplayName": "自动去除空格",
-                  "DataType": 5
-                },
-                {
-                  "ID": 67,
-                  "Name": "TestDataRules",
-                  "OrderNo": 65,
-                  "DisplayName": "生成测试数据规则",
-                  "DataType": 1
-                },
-                {
-                  "ID": 68,
-                  "Name": "UILogic",
-                  "OrderNo": 66,
-                  "DisplayName": "前端界面逻辑",
-                  "DataType": 1
-                },
-                {
-                  "ID": 69,
-                  "Name": "BusinessLogic",
-                  "OrderNo": 67,
-                  "DisplayName": "后端业务逻辑",
-                  "DataType": 1
-                },
-                {
-                  "ID": 200,
-                  "Name": "ExtraProps",
-                  "OrderNo": 68,
-                  "DisplayName": "扩展属性",
-                  "DataType": 1
-                },
-                {
-                  "ID": 201,
-                  "Name": "CustomConfigs",
-                  "OrderNo": 69,
-                  "DisplayName": "自定义配置",
-                  "DataType": 1
-                }
-              ]
-            }
-          },
-          {
-            "ID": 5,
-            "Name": "说明2",
-            "TypeName": "TEXT",
-            "Memo": "说明：\r\n●模型图、表、字段是EZDML的核心对象\r\n●一个DML文件就对应了一个模型图列表 （AllModels），\r\n包含多个模型图\r\n●通过模型图列表对象的getItem(i)（PAS里是Items[i]），\r\n可以遍历获取模型图对象\r\n●模型图对象的tables属性是一个列表对象，可通过它的\r\ngetItem(i)（PAS里是Items[i]）遍历获取数据表对象\r\n●表对象的metaFields属性是一个列表对象，可通过它的\r\ngetItem(i)（PAS里是Items[i]）遍历获取数据字段对象",
-            "CreateDate": "2020-03-15 00:11:13",
-            "OrderNo": 6,
-            "GraphDesc": "Left=983.00\r\nTop=396.00",
-            "BgColor": 16185078,
-            "MetaFields": {"items": []}
-          }
-        ]
-      }
-    },
     {
       "ID": 3,
       "Name": "user",
       "Caption": "用户",
       "CreateDate": "2017-08-02 11:28:26",
-      "OrderNo": 2,
+      "OrderNo": 1,
       "Tables": {
-        "Count": 14,
+        "Count": 15,
         "items": [
           {
             "ID": 15,
             "Name": "member",
             "Caption": "会员",
             "OrderNo": 1,
-            "GraphDesc": "Left=33.00\r\nTop=61.00",
+            "GraphDesc": "Left=51.40846421831898\nTop=79.31205399912915",
             "BgColor": 15724510,
             "MetaFields": {
               "Count": 32,
@@ -879,7 +34,7 @@ export const TestDmj703=
                   "RelateTable": "users",
                   "RelateField": "id",
                   "Not_Nullable": true,
-                  "GraphDesc": "P1=379.00,444.00\r\nP2=328.00,444.00\r\nP3=328.00,444.00\r\nP4=277.00,444.00\r\nHookP1=36.00,24.00\r\nHookP2=224.00,383.00\r\nMod_OP1=0\r\nMod_OP2=0\r\nMod_CP=0\r\nHorz1=1\r\nHorz2=1"
+                  "GraphDesc": "P1=397.4084642183188,462.3120539991286\nP2=346.4084642183188,462.3120539991286\nP3=346.4084642183188,462.3120539991286\nP4=295.40846421831884,462.3120539991286\nHookP1=20,24\nHookP2=224,383\nHorz1=1\nHorz2=1"
                 },
                 {
                   "ID": 19,
@@ -952,7 +107,7 @@ export const TestDmj703=
                   "Not_Nullable": true,
                   "EditorType": "ButtonGroup",
                   "LabelText": "会员VIP等级",
-                  "GraphDesc": "P1=368.00,141.00\r\nP2=322.00,141.00\r\nP3=322.00,141.00\r\nP4=277.00,141.00\r\nHookP1=20.00,75.00\r\nHookP2=216.00,80.00\r\nMod_OP1=0\r\nMod_OP2=0\r\nMod_CP=0\r\nHorz1=1\r\nHorz2=1",
+                  "GraphDesc": "P1=386.4084642183188,159.31205399912946\nP2=341.4084642183188,159.31205399912946\nP3=341.4084642183188,159.31205399912946\nP4=295.40846421831884,159.31205399912946\nHookP1=20,75\nHookP2=216,80\nHorz1=1\nHorz2=1",
                   "ColWidth": 129,
                   "ShowFilterBox": true
                 },
@@ -995,7 +150,7 @@ export const TestDmj703=
                   "IndexType": 2,
                   "EditorType": "ComboBox",
                   "LabelText": "地区",
-                  "GraphDesc": "P1=371.00,322.00\r\nP2=324.00,322.00\r\nP3=324.00,322.00\r\nP4=277.00,322.00\r\nHookP1=112.00,91.00\r\nHookP2=208.00,261.00\r\nMod_OP1=1\r\nMod_OP2=1\r\nMod_CP=0\r\nHorz1=1\r\nHorz2=1",
+                  "GraphDesc": "P1=389.4084642183188,340.3120539991288\nP2=342.4084642183188,340.3120539991288\nP3=342.4084642183188,340.3120539991288\nP4=295.40846421831884,340.3120539991288\nHookP1=112,91\nHookP2=208,261\nMod_OP1=1\nMod_OP2=1\nHorz1=1\nHorz2=1",
                   "Visibility": 3,
                   "ColWidth": 74
                 },
@@ -1284,7 +439,7 @@ export const TestDmj703=
             "Name": "users",
             "Caption": "用户",
             "OrderNo": 2,
-            "GraphDesc": "Left=379.00\r\nTop=420.00",
+            "GraphDesc": "Left=397.4084642183188\nTop=438.31205399912864",
             "BgColor": 16777160,
             "MetaFields": {
               "Count": 9,
@@ -1370,7 +525,7 @@ export const TestDmj703=
             "Name": "socialuser",
             "Caption": "社会化用户",
             "OrderNo": 3,
-            "GraphDesc": "Left=630.00\r\nTop=841.00",
+            "GraphDesc": "Left=648.4084642183195\nTop=859.3120539991277",
             "BgColor": 14085099,
             "MetaFields": {
               "Count": 6,
@@ -1420,7 +575,7 @@ export const TestDmj703=
                   "RelateField": "{Link:Direct}",
                   "Not_Nullable": true,
                   "DataLength": 255,
-                  "GraphDesc": "P1=895.00,884.00\r\nP2=870.00,884.00\r\nP3=870.00,897.00\r\nP4=844.00,897.00\r\nHookP1=20.00,40.00\r\nHookP2=176.00,56.00\r\nMod_OP1=0\r\nMod_OP2=1\r\nMod_CP=0\r\nHorz1=1\r\nHorz2=1"
+                  "GraphDesc": "P1=960.5420220641608,978\nP2=911,978\nP3=911,915.3120539991277\nP4=862.4084642183195,915.3120539991277\nHookP1=20.457977935839153,20.11156481347291\nHookP2=176,56\nMod_OP2=1\nHorz1=1\nHorz2=1"
                 },
                 {
                   "ID": 7,
@@ -1432,7 +587,7 @@ export const TestDmj703=
                   "RelateTable": "users",
                   "RelateField": "id",
                   "IndexType": 2,
-                  "GraphDesc": "P1=549.00,586.00\r\nP2=549.00,651.00\r\nP3=650.00,651.00\r\nP4=650.00,841.00\r\nHookP1=170.00,122.00\r\nHookP2=20.00,20.00\r\nMod_OP1=0\r\nMod_OP2=0\r\nMod_CP=1\r\nHorz1=0\r\nHorz2=0"
+                  "GraphDesc": "P1=583.4084642183196,604.3120539991289\nP2=583.4084642183196,669.3120539991287\nP3=676.4084642183196,669.3120539991287\nP4=676.4084642183196,859.3120539991277\nHookP1=186,138\nHookP2=28,28\nMod_CP=1"
                 }
               ]
             }
@@ -1442,7 +597,7 @@ export const TestDmj703=
             "Name": "role",
             "Caption": "角色",
             "OrderNo": 4,
-            "GraphDesc": "Left=376.00\r\nTop=893.00",
+            "GraphDesc": "Left=394.4084642183188\nTop=911.3120539991276",
             "MetaFields": {
               "Count": 7,
               "items": [
@@ -1516,7 +671,7 @@ export const TestDmj703=
             "Name": "memberrank",
             "Caption": "会员等级",
             "OrderNo": 5,
-            "GraphDesc": "Left=368.00\r\nTop=66.00",
+            "GraphDesc": "Left=386.4084642183188\nTop=84.31205399912915",
             "MetaFields": {
               "Count": 8,
               "items": [
@@ -1598,7 +753,7 @@ export const TestDmj703=
             "Name": "memberattribute",
             "Caption": "会员注册项",
             "OrderNo": 6,
-            "GraphDesc": "Left=42.50\r\nTop=618.00",
+            "GraphDesc": "Left=60.90846421831897\nTop=636.3120539991286",
             "MetaFields": {
               "Count": 11,
               "items": [
@@ -1697,7 +852,7 @@ export const TestDmj703=
             "Name": "businessattribute",
             "Caption": "商家注册项",
             "OrderNo": 7,
-            "GraphDesc": "Left=1053.50\r\nTop=69.00",
+            "GraphDesc": "Left=937.6539221948042\nTop=715.3642836405863",
             "MetaFields": {
               "Count": 11,
               "items": [
@@ -1796,7 +951,7 @@ export const TestDmj703=
             "Name": "business",
             "Caption": "商家",
             "OrderNo": 8,
-            "GraphDesc": "Left=672.00\r\nTop=83.00",
+            "GraphDesc": "Left=714.8421991580789\nTop=152.6228973726232",
             "BgColor": 13828095,
             "MetaFields": {
               "Count": 42,
@@ -1811,7 +966,7 @@ export const TestDmj703=
                   "RelateTable": "users",
                   "RelateField": "id",
                   "Not_Nullable": true,
-                  "GraphDesc": "P1=593.00,511.00\r\nP2=632.00,511.00\r\nP3=632.00,511.00\r\nP4=672.00,511.00\r\nHookP1=186.00,91.00\r\nHookP2=20.00,428.00\r\nMod_OP1=0\r\nMod_OP2=0\r\nMod_CP=0\r\nHorz1=1\r\nHorz2=1"
+                  "GraphDesc": "P1=611.408464218319,537.0108491798521\nP2=662.9795485556687,537.0108491798521\nP3=662.9795485556687,537.0108491798521\nP4=714.8421991580789,537.0108491798521\nHookP1=177.57108433734976,98.69879518072338\nHookP2=20.137349397589787,384.3879518072289\nHorz1=1\nHorz2=1"
                 },
                 {
                   "ID": 41,
@@ -2233,7 +1388,7 @@ export const TestDmj703=
             "Name": "admin_role",
             "Caption": "管理员角色中间表",
             "OrderNo": 9,
-            "GraphDesc": "Left=169.00\r\nTop=837.00",
+            "GraphDesc": "Left=187.40846421831927\nTop=855.3120539991277",
             "MetaFields": {
               "Count": 2,
               "items": [
@@ -2247,7 +1402,7 @@ export const TestDmj703=
                   "RelateTable": "admin",
                   "RelateField": "id",
                   "Not_Nullable": true,
-                  "GraphDesc": "P1=371.00,766.00\r\nP2=300.00,766.00\r\nP3=300.00,766.00\r\nP4=300.00,837.00\r\nHookP1=144.00,96.00\r\nHookP2=131.00,1.00\r\nMod_OP1=1\r\nMod_OP2=1\r\nMod_CP=1\r\nHorz1=1\r\nHorz2=0"
+                  "GraphDesc": "P1=389.4084642183188,784.3120539991286\nP2=318.40846421831895,784.3120539991286\nP3=318.40846421831895,784.3120539991286\nP4=318.40846421831895,855.3120539991277\nHookP1=144,96\nHookP2=131,1\nMod_OP1=1\nMod_OP2=1\nMod_CP=1\nHorz1=1"
                 },
                 {
                   "ID": 2,
@@ -2259,7 +1414,7 @@ export const TestDmj703=
                   "RelateTable": "role",
                   "RelateField": "id",
                   "Not_Nullable": true,
-                  "GraphDesc": "P1=376.00,948.00\r\nP2=302.00,948.00\r\nP3=302.00,948.00\r\nP4=302.00,891.00\r\nHookP1=113.00,55.00\r\nHookP2=133.00,1.00\r\nMod_OP1=1\r\nMod_OP2=1\r\nMod_CP=1\r\nHorz1=1\r\nHorz2=0"
+                  "GraphDesc": "P1=394.4084642183188,966.3120539991278\nP2=320.40846421831895,966.3120539991278\nP3=320.40846421831895,966.3120539991278\nP4=320.40846421831895,909.3120539991276\nHookP1=113,55\nHookP2=133,1\nMod_OP1=1\nMod_OP2=1\nMod_CP=1\nHorz1=1"
                 }
               ]
             }
@@ -2269,7 +1424,7 @@ export const TestDmj703=
             "Name": "admin",
             "Caption": "管理员",
             "OrderNo": 10,
-            "GraphDesc": "Left=371.00\r\nTop=670.00",
+            "GraphDesc": "Left=389.4084642183188\nTop=688.3120539991289",
             "BgColor": 16769535,
             "MetaFields": {
               "Count": 6,
@@ -2284,7 +1439,7 @@ export const TestDmj703=
                   "RelateTable": "users",
                   "RelateField": "id",
                   "Not_Nullable": true,
-                  "GraphDesc": "P1=486.00,586.00\r\nP2=486.00,628.00\r\nP3=486.00,628.00\r\nP4=486.00,670.00\r\nHookP1=107.00,146.00\r\nHookP2=115.00,20.00\r\nMod_OP1=0\r\nMod_OP2=0\r\nMod_CP=0\r\nHorz1=0\r\nHorz2=0"
+                  "GraphDesc": "P1=528.4084642183196,604.3120539991289\nP2=528.4084642183196,646.3120539991286\nP3=528.4084642183196,646.3120539991286\nP4=528.4084642183196,688.3120539991289\nHookP1=131,122\nHookP2=139,28"
                 },
                 {
                   "ID": 5,
@@ -2350,16 +1505,19 @@ export const TestDmj703=
             "Memo": "说明：社会化用户指微信、微博等外部登录的用户",
             "CreateDate": "2020-03-15 00:06:27",
             "OrderNo": 11,
-            "GraphDesc": "Left=895.00\r\nTop=844.00",
+            "GraphDesc": "Left=960.5420220641608\nTop=957.8884351865271",
             "BgColor": 16763594,
-            "MetaFields": {"items": []}
+            "MetaFields": {
+              "items": [],
+              "Count": 0
+            }
           },
           {
             "ID": 25,
             "Name": "area",
             "Caption": "地区",
             "OrderNo": 12,
-            "GraphDesc": "Left=371.00\r\nTop=231.00",
+            "GraphDesc": "Left=389.4084642183188\nTop=249.31205399912938",
             "MetaFields": {
               "Count": 9,
               "items": [
@@ -2442,7 +1600,7 @@ export const TestDmj703=
                   "RelateTable": "area",
                   "RelateField": "id",
                   "IndexType": 2,
-                  "GraphDesc": "P1=578.00,257.00\r\nP2=602.00,257.00\r\nP3=602.00,293.00\r\nP4=578.00,293.00\r\nHookP1=103.00,26.00\r\nHookP2=103.00,62.00\r\nMod_OP1=0\r\nMod_OP2=0\r\nMod_CP=0\r\nHorz1=1\r\nHorz2=1"
+                  "GraphDesc": "P1=596.4084642183196,275.31205399912903\nP2=620.4084642183196,275.31205399912903\nP3=620.4084642183196,311.3120539991288\nP4=596.4084642183196,311.3120539991288\nHookP1=112,26\nHookP2=112,62\nHorz1=1\nHorz2=1"
                 }
               ]
             }
@@ -2452,7 +1610,7 @@ export const TestDmj703=
             "Name": "business_man",
             "Caption": "商家管理",
             "OrderNo": 13,
-            "GraphDesc": "Left=1069.00\r\nTop=337.00",
+            "GraphDesc": "Left=1159.4180664827988\nTop=490.770619828712",
             "Not_GenDatabase": true,
             "BgColor": 14680063,
             "MetaFields": {
@@ -2468,7 +1626,7 @@ export const TestDmj703=
                   "RelateTable": "business",
                   "RelateField": "id",
                   "Not_Nullable": true,
-                  "GraphDesc": "P1=983.00,444.00\r\nP2=1026.00,444.00\r\nP3=1026.00,444.00\r\nP4=1069.00,444.00\r\nHookP1=283.00,361.00\r\nHookP2=20.00,107.00\r\nMod_OP1=0\r\nMod_OP2=1\r\nMod_CP=0\r\nHorz1=1\r\nHorz2=1"
+                  "GraphDesc": "P1=1025.842199158079,589\nP2=1093,589\nP3=1093,597.7706198287119\nP4=1159.4180664827988,597.7706198287119\nHookP1=283.15780084192113,436.37710262737676\nHookP2=20,107\nMod_OP2=1\nHorz1=1\nHorz2=1"
                 },
                 {
                   "ID": 41,
@@ -2585,9 +1743,26 @@ export const TestDmj703=
             "Memo": "会员",
             "CreateDate": "2024-02-15 21:17:50",
             "OrderNo": 14,
-            "GraphDesc": "Left=13.00\r\nTop=13.00\r\nWidth=624.00\r\nHeight=588.00\r\nAutoSize=0\r\nBWidth=312.00\r\nBHeight=294.00",
+            "GraphDesc": "Left=31.408464218318986\nTop=31.312053999129034\nAutoSize=0\nWidth=624\nHeight=588\nBWidth=312\nBHeight=294",
             "BgColor": 16777215,
-            "MetaFields": {"items": []}
+            "MetaFields": {
+              "items": [],
+              "Count": 0
+            }
+          },
+          {
+            "ID": 27,
+            "Name": "欢迎文本",
+            "TypeName": "TEXT",
+            "Memo": " _    _      _                                     \r\n| |  | |    | |                           _        \r\n| |  | | ___| | ___ ___  _ __ ___   ___  | |_ ___  \r\n| |/\\| |/ _ \\ |/ __/ _ \\| '_ ` _ \\ / _ \\ | __/ _ \\ \r\n\\  /\\  /  __/ | (_| (_) | | | | | |  __/ | || (_) |\r\n \\/  \\/ \\___|_|\\___\\___/|_| |_| |_|\\___|  \\__\\___/ \r\n  _____ ______________  ___ _                      \r\n |  ___|___  /  _  \\  \\/  || |                     \r\n | |__    / /| | | | .  . || |                     \r\n |  __|  / / | | | | |\\/| || |                     \r\n | |___./ /__| |/ /| |  | || |____                 \r\n \\____/\\_____/___/ \\_|  |_/\\_____/                 \r\n                                                   \r\n                                                   \r\n欢迎使用EZDML Web版！\r\n\r\n.支持在线查看模型并进行简单的设计\r\n.在线分享模型设计，可将模型数据加密后分享\r\n.支持手机、平板、电脑等主流浏览器\r\n.与EZDML桌面版格式兼容，可互相复制粘贴数据\r\n\r\n这是一个DEMO演示文件！更多高级功能，请下载EZDML桌面版体验",
+            "CreateDate": "2024-08-08 16:20:49",
+            "OrderNo": 15,
+            "GraphDesc": "Left=1099.9727696327473\nTop=19.920108869211816",
+            "BgColor": 16777215,
+            "MetaFields": {
+              "items": [],
+              "Count": 0
+            }
           }
         ]
       }
@@ -2597,7 +1772,7 @@ export const TestDmj703=
       "Name": "order",
       "Caption": "订单",
       "CreateDate": "2017-08-02 15:08:52",
-      "OrderNo": 3,
+      "OrderNo": 2,
       "Tables": {
         "Count": 23,
         "items": [
@@ -6576,4 +5751,4 @@ export const TestDmj703=
       }
     }
   ]
-}
+};

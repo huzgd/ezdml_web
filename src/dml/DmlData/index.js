@@ -27,10 +27,10 @@ function checkListIds(items){
   });
 }
 
-export function checkDmlDataIds(dmlData){
-  if(dmlData.items){
-    checkListIds(dmlData.items);
-    dmlData.items.forEach(model=>{
+export function checkDmlDataIds(dmlContentData){
+  if(dmlContentData.items){
+    checkListIds(dmlContentData.items);
+    dmlContentData.items.forEach(model=>{
       if(model.Tables){
         checkListIds(model.Tables.items);
         model.Tables.items.forEach(table=>{
@@ -41,13 +41,13 @@ export function checkDmlDataIds(dmlData){
       }
     })
   }
-  return dmlData;
+  return dmlContentData;
 }
 
-export function getDmlTableCount(dmlData){
+export function getDmlTableCount(dmlContentData){
   let tbC=0;
-  if(dmlData.items){
-    dmlData.items.forEach(model=>{
+  if(dmlContentData.items){
+    dmlContentData.items.forEach(model=>{
       if(model.Tables && model.Tables.items){
         tbC=tbC+model.Tables.items.length;
       }
@@ -70,11 +70,11 @@ function checkSaveList(mList){
     mList.items.forEach((item,index)=>item.OrderNo=index+1);
   }
 }
-export function checkSaveDmlData(dmlData){
-  checkDmlDataIds(dmlData);
-  if(dmlData.items){
-    checkSaveList(dmlData);
-    dmlData.items.forEach(model=>{
+export function checkSaveDmlData(dmlContentData){
+  checkDmlDataIds(dmlContentData);
+  if(dmlContentData.items){
+    checkSaveList(dmlContentData);
+    dmlContentData.items.forEach(model=>{
       if(model.Tables){
         checkSaveList(model.Tables);
         model.Tables.items.forEach(table=>{
@@ -163,6 +163,51 @@ export const getDmlItemById=(items, id)=>{
   })
   return res;
 };
+
+export const findDmlTableByName=(dmlData, tbName)=>{
+  var res=null;
+  let mds=dmlData.content.items;
+  mds.some(md=>{
+    if(md.Tables.items.some(tb=>{
+      if(tb.Name.toLowerCase()==tbName.toLowerCase()){
+        res=tb;
+        return true;
+      }
+    }))
+      return true;
+  });
+  return res;
+}
+
+export const getUnusedTableName=(dmlData, tbName)=>{
+  var t=tbName;
+  var iNo=1;
+  while(findDmlTableByName(dmlData, t))
+  {
+    iNo++;
+    t=tbName+"_"+iNo;
+  }
+  return t;
+}
+
+export const checkNewModelName=(dmlData, mdNew)=>{
+  let mds=dmlData.content.items;
+  let mdName=mdNew.Name;
+  let mdNo=1;
+  while(mdNo<10000){
+    mdNo++;
+    let bFound=mds.some(md=>{
+      if(md!=mdNew)
+        if(md.Name==mdName)
+          return true;
+    });
+    if(!bFound){
+      mdNew.Name=mdName;
+      return;
+    }
+    mdName=mdNew.Name+'_'+mdNo;
+  }
+}
 
 const checkNewTableName=(dmlData, tbNew)=>{
   tbNew._EZRESERVED_ISNEW=true;
@@ -254,8 +299,8 @@ const syncOnTableChanged=(dmlData, tbNew, tbOld)=>{
   });
 };
 
-export const syncTbInfo=(tbSrc, tbDst)=>{
-  syncMapInfo(tbSrc, tbDst);
+export const syncTbInfo=(tbSrc, tbDst, opt)=>{
+  syncMapInfo(tbSrc, tbDst, opt);
   var dfs=tbDst.MetaFields.items;
   checkSaveList(tbSrc.MetaFields);
   tbSrc.MetaFields.items.forEach(fdSrc=>{
@@ -264,7 +309,7 @@ export const syncTbInfo=(tbSrc, tbDst)=>{
       fdDst={};
       dfs.push(fdDst);
     }
-    syncMapInfo(fdSrc,fdDst);
+    syncMapInfo(fdSrc,fdDst, opt);
   });
   
   //删除不存在的字段
@@ -281,7 +326,7 @@ export const syncTbInfo=(tbSrc, tbDst)=>{
   tbDst.MetaFields.Count=tbDst.MetaFields.items.length;
 }
 
-export const syncMapInfo=(mSrc, mDst)=>{
+export const syncMapInfo=(mSrc, mDst, opt)=>{
   let id=mDst.ID;
   let graphDsc=mDst.GraphDesc;
   for(var p in mSrc){
@@ -303,6 +348,30 @@ export const syncMapInfo=(mSrc, mDst)=>{
   mDst.ID=id;
   mDst.GraphDesc=graphDsc;
 }
+
+
+export const removeReservedProps=(map)=>{
+  let toDels=[];
+  for(var p in map){
+    if(p.startsWith('_EZRESERVED_'))
+      toDels.push(p);
+  }
+  toDels.forEach(p=>{
+    delete map[p];
+  });
+}
+
+export const removeTbReservedProps=(tb)=>{
+  if(!tb)
+    return;
+  removeReservedProps(tb);
+  var fds=tb.MetaFields.items;
+  if(!fds) return;
+  fds.forEach(fd=>{
+    removeReservedProps(fd);
+  });
+}
+
 
 export const cloneMap=(jmap)=>{
   let js=JSON.stringify(jmap);

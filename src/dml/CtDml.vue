@@ -25,6 +25,7 @@
   <a href="" ref="dmlSaveLink" style="display: none;"/>
 
   <DmlShare :dmlData="dmlData"/>
+  <DmlGenDDL :dmlData="dmlData"/>
   <DmlPropDialog  :dmlData="dmlData"/>
   <DmlContextMenu :dmlData="dmlData"/>
   <DmlOnlineFiles :dmlData="dmlData"/>
@@ -41,6 +42,7 @@ import DmlMainMenu from './DmlComp/DmlMainMenu.vue'
 import DmlContextMenu from './DmlComp/DmlContextMenu.vue'
 import DmlOnlineFiles from './DmlComp/DmlOnlineFiles.vue'
 import DmlShare from './DmlComp/DmlShare.vue'
+import DmlGenDDL from './DmlComp/DmlGenDDL.vue'
 import {emptyDmlData, getDmlTableCount, loadDmlData, getDmlItemByName, processDmlDataEvent, checkDmlDataIds, 
   checkSaveDmlData, saveDmlCacheFile, setDmlFileHistory, getDmlUid} from './DmlData'
 import CryptoJS from 'crypto-js';
@@ -101,12 +103,28 @@ const _execCmd=(cmd,par1,par2)=>{
       openEzdmlDownload();
       return true;
     }
+    if(par1=='openEzdmlGithubSrc'){
+      openEzdmlGithubSrc();
+      return true;
+    }
     if(par1=='openEzdmlHome'){
       openEzdmlHome();
       return true;
     }
     if(par1=='exportImage'){
       exportImage();
+      return true;
+    }
+    if(par1=='showDmlGenDDL'){
+      _emitEvent('showDmlGenDDL',cmd);;
+      return true;
+    }
+    if(par1=='showDmlImpDDL'){
+      _emitEvent('showDmlImpDDL',cmd);;
+      return true;
+    }
+    if(par1.startsWith("AICmd_")){
+      execAICmd(par1.substring(6));
       return true;
     }
   }
@@ -193,9 +211,10 @@ function showSelectedProp(){
   let selC=dmlData.execCmd('getDmlSelectedCount');
   if(selC==1){
     let tb=dmlData.execCmd('getDmlSelectedTable');
-    if(tb)
-      showTableProp(tb);
-    else {
+    if(tb){
+      let fd=dmlData.execCmd('getDmlSelectedField');
+      showTableProp(tb,fd?fd.Name:'');
+    } else {
       let lnk=dmlData.execCmd('getDmlSelectedLink');
       if(lnk)
         showLinkProp(lnk);
@@ -203,8 +222,8 @@ function showSelectedProp(){
   }
 }
 
-function showTableProp(tb){
-  _emitEvent('showTablePropDialog', tb);
+function showTableProp(tb,focusField){
+  _emitEvent('showTablePropDialog', tb, focusField);
 }
 
 function showLinkProp(lnk){
@@ -289,7 +308,7 @@ const loadUrl=(url,opt, origUrl)=>{
   let tbC=getDmlTableCount(dmlData.content);
   if(tbC>0){
     ElMessageBox.confirm(
-      '加载新文件将清空已有内容，未保存的数据将丢失。确定要继续加载吗?',
+      '加载新文件将清空已有内容，请确保已有内容都已保存。确定要继续加载吗?',
       '加载 - '+fn,
       {
         confirmButtonText: '确定',
@@ -580,6 +599,9 @@ const delSelected=()=>{
 function openEzdmlDownload(){
   window.open("http://www.ezdml.com/download_cn.html");
 }
+function openEzdmlGithubSrc(){
+  window.open("https://github.com/huzgd/ezdml_web");
+}
 function openEzdmlHome(){
   window.open("http://www.ezdml.com/");
 }
@@ -595,6 +617,9 @@ function exportImage(){
   });
 }
 
+function execAICmd(cmd){
+  _emitEvent('showDmlAIChat',cmd);
+}
 
 // 拖拽事件
 let startResizeDrag = function (event, type) {

@@ -7,35 +7,46 @@ var DML_FONTSC_FD=7.4; //字段计算专用
 var DML_FONT_EXWIDTH=8;
 var DEF_TEXT_CLOB_LEN=99999;
 var DEF_DMLLINK_PICK_DIST=4;
+var G_CreateForeignkeys=true;
+var G_CreateIndexForForeignkey=false;
+var G_CreateSeqForOracle=true;
 
-const DML_FieldTypeNames = [
-  '未知', '主键', '外键', '字符串', '整数', '小整数', '浮点数', '日期',
-  '真假', '二进制数据', '对象', '计算字段', '列表', '函数', '事件', '其它'
-];
+export const DEF_VAL_auto_increment = "{auto_increment}";
+
 
 const DML_PhyFieldTypeNames_Ora = [
-  '[UNKNOWN]', 'NUMBER', 'NUMBER', 'VARCHAR2', 'NUMBER', 'NUMBER(2)', 'NUMBER', 'DATE',
-  'NUMBER(1)', 'BLOB', 'OBJECT', 'CALC', 'LIST', 'FUNCTION', 'EVENT', 'OTHER'
+  '[UNKNOWN]', 'VARCHAR2', 'NUMBER(10)', 'NUMBER', 'DATE',  'NUMBER(1)', 'NUMBER(2)', 
+  'BLOB', 'OBJECT', 'CALC', 'LIST', 'FUNCTION', 'EVENT', 'OTHER'
 ];
 
 const DML_PhyFieldTypeNames_Mysql = [
-  '[UNKNOWN]', 'INTEGER', 'INTEGER', 'VARCHAR', 'INTEGER', 'TINYINT', 'DOUBLE', 'DATETIME',
-  'BIT', 'BINARY', 'OBJECT', 'CALC', 'LIST', 'FUNCTION', 'EVENT', 'OTHER'
+  '[UNKNOWN]', 'VARCHAR', 'INTEGER', 'DOUBLE', 'DATETIME', 'BIT', 'TINYINT', 
+  'BINARY', 'OBJECT', 'CALC', 'LIST', 'FUNCTION', 'EVENT', 'OTHER'
 ];
 
 const DML_PhyFieldTypeNames_Sqlsvr = [
-  '[UNKNOWN]', 'INT', 'INT', 'VARCHAR', 'INT', 'TINYINT', 'NUMERIC', 'DATETIME',
-  'BIT', 'BINARY', 'OBJECT', 'CALC', 'LIST', 'FUNCTION', 'EVENT', 'OTHER'
+  '[UNKNOWN]', 'VARCHAR', 'INT', 'NUMERIC', 'DATETIME', 'BIT', 'TINYINT', 
+  'BINARY', 'OBJECT', 'CALC', 'LIST', 'FUNCTION', 'EVENT', 'OTHER'
 ];
 
 const DML_PhyFieldTypeNames_Std = [
-  '[UNKNOWN]', 'INTEGER', 'INTEGER', 'VARCHAR', 'INTEGER', 'TINYINT', 'NUMERIC', 'DATETIME',
-  'BIT', 'BINARY', 'OBJECT', 'CALC', 'LIST', 'FUNCTION', 'EVENT', 'OTHER'
+  '[UNKNOWN]', 'VARCHAR', 'INTEGER', 'NUMERIC', 'DATETIME', 'BIT', 'TINYINT',
+  'BINARY', 'OBJECT', 'CALC', 'LIST', 'FUNCTION', 'EVENT', 'OTHER'
 ];
 
-const DML_LogicTypeNames = [
-  'UNKNOWN', 'String', 'Integer', 'Float', 'Date', 'Bool', 'Enum', 
+export const DML_LogicTypeNames = [
+  'Unknow', 'String', 'Integer', 'Float', 'Date', 'Bool', 'Enum', 
   'Blob', 'Object', 'Calculate', 'List', 'Function', 'Event', 'Other'
+];
+
+export const DML_LogicTypeNamesCn = [
+  '未知', '文本', '整数', '浮点数', '时间', '真假', '枚举',
+  '文件', '对象', '计算', '列表', '函数', '事件', '其它'
+];
+
+export const DML_LogicTypeNamesA = [
+  'U',  'S',  'I',  'F',  'D',  'BO',  'E',
+  'BL',  'O',  'C',  'L',  'FU',  'EV',  'X'
 ];
 
 
@@ -86,10 +97,187 @@ export enum DmlKeyType{
   cfktOthers   
 }
 
+export const DML_KeyTypeNamesCn=[
+  "普通",
+  "编号",
+  "父编号",
+  "关联编号",
+  "名称",
+  "标题",
+  "注释",
+  "类名",
+  "组织机构编号",
+  "期号",
+  "创建人编号",
+  "创建人姓名",
+  "创建日期",
+  "修改人编号",
+  "修改人姓名",
+  "修改日期",
+  "版本号",
+  "历史编号",
+  "锁定状态",
+  "工作流编号",
+  "工作流进程号",
+  "超链接",
+  "数据级别",
+  "数据状态",
+  "排序号",
+  "其它"
+];
+
 export enum DmlIndexType{
   cfitNone,
   cfitUnique,
   cfitNormal 
+}
+
+export const DEF_CTMETAFIELD_CONSTRAINT_STR_ENG =
+[
+'',
+'NotNull',
+'PK',
+'FK',
+'UniqueIndex',
+'NormalIndex',
+'Default',
+'AutoInc',
+'Relation',
+'TypeName'
+];
+export const DEF_CTMETAFIELD_CONSTRAINT_STR_CHN =
+[
+  "",
+  "非空",
+  "主键",
+  "外键",
+  "唯一索引",
+  "普通索引",
+  "缺省值",
+  "自增长",
+  "关联",
+  "类名",
+];
+
+const DEF_CTMETAFIELD_DATATYPE_NAMES_ALIAS = [
+  '',
+  'string,char,nchar,varchar,nvarchar,longvarchar,varchar2,nvarchar2,text,ntext,clob,nclob,long,tinytext,mediumtext,longtext,str,guid,uuid,uniqueidentifier,字符,文本,文字',
+  'integer,smallint,int,bigint,mediumint,seq,seri,整数,整形,自然数,序列,自增',
+  'float,double,real,decimal,number,numeric,money,smallmoney,dec,fixed,浮点,精度,实数,货币,金额,小数',
+  'datetime,date,time,timestamp,year,smalldatetime,日期,时间,日历',
+  'boolean,bit,bool,布尔,真假',
+  'enum,set,tinyint,枚举,集合',
+  'blob,bfile,binary,varbinary,longvarbinary,image,raw,longraw,tinyblob,mediumblob,longblob,文件,二进制,图像,原始',
+  'geoloc,mdsys.geoloc,xmltype,json,对象,复杂',
+  '',
+  '',
+  '',
+  '',
+  ''
+];
+
+export const EZTB_CODE_GENERATOR_NAMES:string[]=[];
+const EZTB_CODE_GENERATOR_FUNS:any=[]; //fun(curTable: any, opt: any): string;
+
+export function registerTbCodeGenerator(name: string, fun: any){
+  //fun(curTable: any, opt: any): string;
+  EZTB_CODE_GENERATOR_NAMES.push(name);
+  EZTB_CODE_GENERATOR_FUNS.push(fun);
+  return EZTB_CODE_GENERATOR_FUNS.length;
+}
+
+export function callTbCodeGenerator(name: string, curTable: any, opt: any){
+  for(var idx=0;idx<EZTB_CODE_GENERATOR_NAMES.length;idx++){
+    if(EZTB_CODE_GENERATOR_NAMES[idx]==name){
+      let fun=EZTB_CODE_GENERATOR_FUNS[idx];
+      if(fun)
+        return fun(curTable, opt);
+    }
+  }
+  return '';
+}
+
+function tbSQLGen_any(dbType: string, curTable: any, opt: any): string{
+  let res= '';
+  if(opt && opt.addDbTypeHint) res+= '/** '+(dbType=='SQL'?'':dbType)+' SQL Generate **/\n\n';
+  let tbo=createDmlObjFromMetaData(curTable);
+  if(!tbo) return res;
+  let tb=tbo as DmlTableObj;
+  res=res+tb.genSqlEx(true, true, dbType);
+  if(opt && opt.addDqlDml)
+    res+= '\n\n'+tb.genDqlDmlSql(dbType,'');
+  res+='\n';
+  return res;
+}
+
+export const DEF_DmlDbTypeList=['SQL','Oracle','SQLServer','MySQL','PostgreSQL','SQLite','Hive'];
+
+export function formatDateTime(date: Date, format:string='') {
+	if(!date){
+		date=new Date();
+	}
+	if(!format)
+		format='yyyy-MM-dd HH:mm:ss';
+  const o:any = {
+    'M+': date.getMonth() + 1, // 月份
+    'd+': date.getDate(), // 日
+    'h+': date.getHours() % 12 === 0 ? 12 : date.getHours() % 12, // 小时
+    'H+': date.getHours(), // 小时
+    'm+': date.getMinutes(), // 分
+    's+': date.getSeconds(), // 秒
+    'q+': Math.floor((date.getMonth() + 3) / 3), // 季度
+    'S': date.getMilliseconds(), // 毫秒
+    'a': date.getHours() < 12 ? '上午' : '下午', // 上午/下午
+    'A': date.getHours() < 12 ? 'AM' : 'PM', // AM/PM
+  };
+  if (/(y+)/.test(format)) {
+    format = format.replace(RegExp.$1, (date.getFullYear() + '').substr(4 - RegExp.$1.length));
+  }
+  for (let k in o) {
+    if (new RegExp('(' + k + ')').test(format)) {
+      let os:string=o[k];
+      format = format.replace(
+        RegExp.$1,
+        RegExp.$1.length === 1 ? os : ('00' + os).substr(('' + os).length)
+      );
+    }
+  }
+  return format;
+}
+
+function registerTbSQLGens(){
+  DEF_DmlDbTypeList.forEach(dbType=> registerTbCodeGenerator(dbType, (curTable: any, opt: any)=> tbSQLGen_any(dbType.toUpperCase(),curTable, opt)));
+}
+
+function getCtFieldDataTypeOfAliasEx(AName: string, bPartial: boolean): number {
+  let result: number = 0;
+  let s: string;
+  let ss: string[];
+
+  for (let t = 0; t < 14; t++) {
+      s = ',' + DEF_CTMETAFIELD_DATATYPE_NAMES_ALIAS[t] + ',';
+      if (s.toLowerCase().indexOf(',' + AName.toLowerCase() + ',') > -1) {
+          result = t;
+          return result;
+      }
+  }
+
+  if (!bPartial) {
+      return result;
+  }
+  
+  for (let t = 0; t < 14; t++) {
+      s = DEF_CTMETAFIELD_DATATYPE_NAMES_ALIAS[t];
+      ss = s.toLowerCase().split(',');
+      for (let i = 0; i < ss.length; i++) {
+          if (ss[i] !== '' && AName.toLowerCase().indexOf(ss[i]) > -1) {
+              result = t;
+              return result;
+          }
+      }
+  }
+
+  return result;
 }
 
 export function genGuid() {
@@ -129,6 +317,200 @@ const getDmlItemByName=(items:any[], name:any)=>{
   return res as any;
 };
 
+function isReservedKeyworkd(name:string){
+  return false;
+}
+
+function getDbQuotName(name:string, dbType:string){
+  return name;
+}
+
+function getDbQuotString(aStr: string, dbType: string): string {
+  const DEF_DB_CV_KEY_CHARS: string[] = ['\\', "'", '\r', '\n'];
+  const DEF_DB_CV_KEY_CHARS_REP_ORACLE: string[] = ['\\', "''", "' || chr(13) || '", "' || chr(10) || '"];
+  const DEF_DB_CV_KEY_CHARS_REP_MYSQL: string[] = ['\\\\', "''", '\\r', '\\n'];
+  const DEF_DB_CV_KEY_CHARS_REP_SQLSERVER: string[] = ['\\', "''", "' + char(13) + '", "' + char(10) + '"];
+  const DEF_DB_CV_KEY_CHARS_REP_POSTGRESQL: string[] = ["' || chr(92) || '", "''", "' || chr(13) || '", "' || chr(10) || '"];
+  const DEF_DB_CV_KEY_CHARS_REP_SQLITE: string[] = ["' || char(92) || '", "''", "' || char(13) || '", "' || char(10) || '"];
+  const DEF_DB_CV_KEY_CHARS_REP_STD: string[] = ['\\', "''", '\r', '\n'];
+
+  if (!aStr) {
+      return 'null';
+  } else {
+      let result: string = aStr;
+      for (let i = 0; i < DEF_DB_CV_KEY_CHARS.length; i++) {
+          if (result.includes(DEF_DB_CV_KEY_CHARS[i])) {
+              let s: string;
+              switch (dbType) {
+                  case 'ORACLE':
+                      s = DEF_DB_CV_KEY_CHARS_REP_ORACLE[i];
+                      break;
+                  case 'MYSQL':
+                      s = DEF_DB_CV_KEY_CHARS_REP_MYSQL[i];
+                      break;
+                  case 'SQLSERVER':
+                      s = DEF_DB_CV_KEY_CHARS_REP_SQLSERVER[i];
+                      break;
+                  case 'POSTGRESQL':
+                      s = DEF_DB_CV_KEY_CHARS_REP_POSTGRESQL[i];
+                      break;
+                  case 'SQLITE':
+                      s = DEF_DB_CV_KEY_CHARS_REP_SQLITE[i];
+                      break;
+                  default:
+                      s = DEF_DB_CV_KEY_CHARS_REP_STD[i];
+                      break;
+              }
+              result = result.split(DEF_DB_CV_KEY_CHARS[i]).join(s);
+          }
+      }
+      return `'${result}'`;
+  }
+}
+
+export function dbSqlStringToDateTime(AStr: string, ADbType: string): string {
+  let result = AStr.trim();
+
+  if (result === '' || result.toLowerCase() === 'null') {
+      return result;
+  }
+
+  result = result.replace(/\//g, '-');
+
+  switch (ADbType.toUpperCase()) {
+      case 'ORACLE':
+          if (result.indexOf(':') === -1) {
+              return `to_date('${result}','yyyy-mm-dd')`;
+          } else {
+              return `to_date('${result}','yyyy-mm-dd HH24:mi:ss')`;
+          }
+      case 'SQLSERVER':
+          if (result.indexOf(':') === -1) {
+              return `convert(datetime,'${result}',23)`;
+          } else {
+              return `convert(datetime,'${result}',120)`;
+          }
+      case 'MYSQL':
+          if (result.indexOf(':') === -1) {
+              return `STR_TO_DATE('${result}','%Y-%m-%d')`;
+          } else {
+              return `STR_TO_DATE('${result}','%Y-%m-%d %H:%i:%s')`;
+          }
+      case 'POSTGRESQL':
+          if (result.indexOf(':') === -1) {
+              return `to_timestamp('${result}','yyyy-MM-dd')`;
+          } else {
+              return `to_timestamp('${result}','yyyy-MM-dd HH24:mi:ss')`;
+          }
+      case 'H2':
+          if (result.indexOf(':') === -1) {
+              return `parsedatetime('${result}','yyyy-MM-dd')`;
+          } else {
+              return `parsedatetime('${result}','yyyy-MM-dd hh:mm:ss')`;
+          }
+      case 'SQLITE':
+          return `'${result}'`;
+      default:
+          return `'${result}'`;
+  }
+}
+
+function replaceSingleQuotmark(txt: string): string{
+  let res=txt;
+  if(res && res.indexOf("\'")>=0)
+    res=res.replace(/\'/g,"\'\'");
+  return res;
+}
+
+const crcTable: number[] = [];
+function crc32(str: string): number {
+  if(crcTable.length==0)
+    for (let i = 0; i < 256; i++) {
+        let crc = i;
+        for (let j = 0; j < 8; j++) {
+            crc = (crc & 1) ? (crc >>> 1) ^ 0xEDB88320 : crc >>> 1;
+        }
+        crcTable[i] = crc;
+    }
+
+  let crc = 0xFFFFFFFF;
+  for (let i = 0; i < str.length; i++) {
+      const byte = str.charCodeAt(i);
+      crc = (crc >>> 8) ^ crcTable[(crc ^ byte) & 0xFF];
+  }
+  return (crc ^ 0xFFFFFFFF) >>> 0; // 确保结果为无符号32位整数
+}
+
+const CtTbNamePrefixDefs: string[] = [];
+
+function getIdxName(ATbn: string, AFieldName: string): string {
+  let S: string = AFieldName;
+  let T: string = S;
+  let S2: string;
+  let WS: string;
+  let I: number, N: number;
+
+  if (S.indexOf(ATbn) === -1) {
+      S = ATbn + '_' + S;
+  } else {
+      ATbn = '';
+  }
+  T = S;
+
+  if (S.length > 21) {
+      for (I = 0; I < CtTbNamePrefixDefs.length; I++) {
+          if (S.toUpperCase().startsWith(CtTbNamePrefixDefs[I].toUpperCase())) {
+              S = S.substring(CtTbNamePrefixDefs[I].length);
+              ATbn = ATbn.substring(CtTbNamePrefixDefs[I].length);
+              break;
+          }
+      }
+  }
+
+  if (S.length > 21) {
+      N = 8;
+      S = ATbn;
+      if (S.length > 9) {
+          WS = S;
+          S2 = WS.substring(WS.length - 3);
+          if (S2.length > 5) {
+              S2 = WS.substring(WS.length - 2);
+          }
+          while (S.length > (10 - S2.length)) {
+              S = WS.substring(0, N);
+              N--;
+          }
+          S = S + S2;
+          ATbn = S;
+      }
+
+      S = ATbn + '_' + AFieldName;
+      if (S.length > 21) {
+          N = 18;
+          WS = S;
+          S2 = WS.substring(WS.length - 3);
+          if (S2.length > 5) {
+              S2 = WS.substring(WS.length - 2);
+          }
+
+          while (S.length > (21 - S2.length)) {
+              S = WS.substring(0, N);
+              N--;
+          }
+          S = S + S2;
+      }
+
+      T = crc32(T).toString(16).padStart(4, '0');
+      S = S + T;
+  }
+
+  return S;
+}
+
+function needGenFKIndexesSQL(tb: DmlTableObj): boolean{
+  return G_CreateForeignkeys && G_CreateIndexForForeignkey;
+}
+
 export function valEqs(v1:number, v2:number){
     let d=Math.abs(v1-v2);
     if(d<0.000001)
@@ -158,9 +540,20 @@ export function dmLength(str:string){
   return len;  
 } 
 
+export function extStr(s:string, len:number, span:string=''){
+  if(!s) return s;
+  s=s.trim();
+  if(!span) span=' ';
+  var L= dmLength(s);
+  if(L<=len)
+    for(var i=L;i<=len;i++)
+      s+=span;
+  return s;
+}
+
 export function extractCompStr(str:string, sBegin:string, sEnd:string){
   if(!str || !sBegin)
-	  return null;
+	  return '';
   var po=str.indexOf(sBegin);
   if(po<0)
 	  return "";
@@ -168,6 +561,62 @@ export function extractCompStr(str:string, sBegin:string, sEnd:string){
   if(po2<0)
 	  return "";
   return str.substring(po+sBegin.length,po2);
+}
+
+export function modifyCompStr(
+  strSrc: string,
+  subVal: string,
+  sCompS: string,
+  sCompE: string,
+  bCaseInsensitive: boolean =false
+): string {
+  let result = '';
+  let str = strSrc;
+
+  let p0: number;
+  if (bCaseInsensitive) {
+    p0 = str.toUpperCase().indexOf(sCompS.toUpperCase());
+  } else {
+    p0 = str.indexOf(sCompS);
+  }
+  if (p0 === -1) {
+    return result;
+  }
+
+  const l = sCompS.length;
+  let res = str.substring(0, p0 + l);
+  str = str.substring(p0 + l);
+
+  let p1: number;
+  if (bCaseInsensitive) {
+    p1 = str.toUpperCase().indexOf(sCompE.toUpperCase());
+  } else {
+    p1 = str.indexOf(sCompE);
+  }
+  if (p1 === -1) {
+    return result;
+  }
+
+  result = res + subVal + str.substring(p1);
+  return result;
+}
+
+export function addOrModifyCompStr(
+  strSrc: string,
+  subVal: string,
+  sCompS: string,
+  sCompE: string,
+  bCaseInsensitive: boolean = false
+): string {
+  let res=modifyCompStr(
+    strSrc,
+    subVal,
+    sCompS,
+    sCompE,
+    bCaseInsensitive);
+  if(!res)
+    res=strSrc + sCompS + subVal + sCompE;  
+  return res;
 }
 
 function readIniLned(iniStr:string, prop:string){
@@ -595,7 +1044,7 @@ export class DmlDrawer{
     if(bCheckCenter){
       let cx=obj.left+obj.width/2;
       let cy=obj.top+obj.height/2;
-      return this.rectInVision(cx-1,cy-1,cx+1,cy+1);
+      return this.rectInVision(cx-1,cy-1,2,2);
     } else
       return obj.rectTouchObj(this.boundsLeft, this.boundsTop, this.boundsWidth, this.boundsHeight)
   }
@@ -943,6 +1392,22 @@ export class DmlDrawer{
     obj.selected=true;
     if(!this.selectionList.some(sel=>sel==obj))
       this.selectionList.push(obj);
+    if(this.selectionList.length>2){
+      this.selectionList.forEach(obj=>{
+        if(obj instanceof DmlTableObj){
+          (obj as DmlTableObj).clearFocusField();
+          (obj as DmlTableObj).captionFocused=false;
+        }
+      })
+    } else if(this.selectionList.length==2){
+      this.selectionList.forEach((obj,index)=>{
+        if(obj instanceof DmlTableObj){
+          if(index==0)
+            (obj as DmlTableObj).clearFocusField();
+          (obj as DmlTableObj).captionFocused=false;
+        }
+      })
+    }
   }
 
   public removeFromSelection(obj: DmlObj){
@@ -1100,15 +1565,17 @@ export class DmlDrawer{
   }
 
   public createDmlObjFromMeta(meta:any){
-    let obj;
-    if(meta.TypeName=='GROUP')
-      obj=new DmlGroupBox();
-    else if(meta.TypeName=='TEXT')
-      obj=new DmlTextObj();
-    else
-      obj=new DmlTableObj();
-    obj.loadFromMeta(meta);
-    return obj;
+    let res=createDmlObjFromMetaData(meta);
+    if(res instanceof DmlTableObj){
+      var fds=(res as DmlTableObj).fields;
+      for(var i=fds.length-1;i>=0;i--){
+        var fd=fds[i];
+        if(fd.metaData.FieldWeight && fd.metaData.FieldWeight <= -9){
+          fds.splice(i,1);
+        }
+      }
+    }
+    return res;
   }
 
   public addMetaTable(meta:any){
@@ -1250,23 +1717,42 @@ export class DmlDrawer{
     let dw=obj.width/4;
     let dh=obj.height/4;
     let orgLeft=obj.left;
+    let orgTop=obj.top;
+    let ddist=100;
+    let ix=0, iy=0, im=0;
     while(true){
       let cx=obj.left+obj.width/2;
       let cy=obj.top+obj.height/2;
       if(this.dmlObjList.some(o=>{
         if(o instanceof DmlEntityObj && o.drawOnBackground==0){
-          if(o!=obj){
+          if(o!=obj && (o.left || o.top)){
             if(o.rectTouchObj(cx-dw,cy-dh,dw+dw,dh+dh)){
               return true;
             }
           }
         }
       })){
-        obj.left=obj.left+100;
-        if(obj.right>=this.contentWidth){
-          obj.left=orgLeft-obj.width-100;
-          obj.top=obj.top+100;
+        while (im<1000){
+          if(ix>=im && iy>=im){
+            im++;
+            ix=im;
+            iy=0;
+          } else if(iy<im){
+            iy++;
+            if(iy==im)
+              ix=0;
+          } else {
+            ix++;
+          }
+          if(ix>2 && orgLeft+ddist*ix+dw*2>=this.contentWidth){
+            continue;
+          } else {
+            break;
+          }
         }
+        obj.left=orgLeft+ddist*ix;
+        obj.top=orgTop+ddist*iy;
+
         dw=obj.width/2+20;
         dh=obj.height/2+20;
       } else {
@@ -1296,6 +1782,16 @@ export class DmlDrawer{
         }
       });
     }
+    ds.forEach(obj=>{
+      if(obj instanceof DmlEntityObj){
+        if(!obj.left && !obj.top && !obj.metaData.GraphDesc){
+          obj.left=4;
+          obj.top=4;
+          this.findSpaceForObj(obj);
+          obj.regenGraphicDesc();
+        }
+      }
+    });
     this.findAllFKLinks(null);
     this.checkContentSize();
 
@@ -1824,7 +2320,16 @@ export class DmlObj {
       this.fillColor=delphi2CssColor(meta.BgColor);
   }
   
-  public saveToMeta(meta: any){    
+  public saveToMeta(meta: any=null){   
+    if(!meta) 
+      meta=this.metaData;
+    meta.ID=this.id;
+    meta.Name=this.name;
+    meta.Caption=this.caption;
+    meta.Memo=this.comment;
+    meta.GraphDesc=this.graphDesc;
+    if(this.fillColor)
+      meta.BgColor=css2DelphiColor(this.fillColor);
   }
 
   public resetShape(){
@@ -1920,6 +2425,9 @@ export class DmlObj {
   public setModified(){
     if(this.owner)
     this.owner.setModified();
+  }
+  
+  public execCmd(cmd:string, par1:string, par2:string, opt:any){
   }
 
 }
@@ -3753,6 +4261,8 @@ export class DmlTextObj extends DmlEntityObj{
         ss.splice(i, 0, t);
       }
       i++;
+      if(i>200)
+        break;
     }
   
     while (ss.length >= my) {
@@ -3824,8 +4334,10 @@ export class DmlTextObj extends DmlEntityObj{
     let tx=drawer.getX(this.left+4);
     let ty=ry1+rowh;
     this.drawComment.forEach(txt=>{
-      ctx.fillText(txt, tx, drawVal(ty));
-      ty+=rowh;
+      if(ty<ry2-rowh){
+        ctx.fillText(txt, tx, drawVal(ty));
+        ty+=rowh;
+      }
     });
 
   }
@@ -3897,7 +4409,7 @@ export class DmlGroupBox extends DmlEntityObj{
 }
 
 export class DmlField{
-  public metaData: any;
+  public metaData: any={};
   public id: string='';
   public name: string=''; //显示名
   public caption: string=''; //字段名
@@ -3921,6 +4433,8 @@ export class DmlField{
   private fieldDesc_phy: string='';
   
   public fieldFocusMode:number=0;//0无 1关联主键 2关联外键 3选字段
+
+  public userData: any=null;
   
   public get hasCaption(){
     return (this.caption && this.caption!=this.name);
@@ -3931,6 +4445,10 @@ export class DmlField{
     if(this.hasCaption)
       res=res+'('+this.caption+')';
     return res;
+  }
+
+  public get relateTableRealName(){
+    return this.relateTable;
   }
 
   public isFK(){
@@ -3963,6 +4481,21 @@ export class DmlField{
     return this.isPK() || (this.indexType==DmlIndexType.cfitUnique);
   }
 
+  public isPhysicalField(){
+    if(this.metaData && this.metaData.DataLevel==4) return false;
+    if(this.comment && this.comment.indexOf('[NOT_DB_FIELD]')>=0) return false;
+    if(this.comment && this.comment.indexOf('[IS_DB_FIELD]')>=0) return true;
+    let tp=this.fieldType;
+    if(tp==DMLFieldType.cfdtUnknow) return false;
+    if(tp==DMLFieldType.cfdtCalculate) return false;
+    if(tp==DMLFieldType.cfdtFunction) return false;
+    if(tp==DMLFieldType.cfdtEvent) return false;
+    if(tp==DMLFieldType.cfdtOther) return false;
+    if(tp==DMLFieldType.cfdtObject && !this.fieldTypeName) return false;
+    if(tp==DMLFieldType.cfdtList && !this.fieldTypeName) return false;
+    return true;
+  }
+
   public getIconIndex(){
     let st=0;
     if(this.fieldWeight<0)
@@ -3992,8 +4525,8 @@ export class DmlField{
     this.id=meta.ID;
     this.name=meta.Name;
     this.caption=meta.DisplayName;
-    this.fieldType=meta.DataType;
-    this.fieldTypeName=meta.FieldTypeName;
+    this.fieldType=meta.DataType||DMLFieldType.cfdtUnknow;
+    this.fieldTypeName=meta.DataTypeName;
     this.fieldLen=meta.DataLength;
     this.fieldScal=meta.DataScale;
     this.relateTable=meta.RelateTable;
@@ -4006,21 +4539,40 @@ export class DmlField{
     this.graphDesc=meta.GraphDesc;
   }
 
-  public getFieldTypeStr(bPhy:boolean){
+  public saveToMeta(meta: any=null){
+    if(!meta) meta=this.metaData;
+    meta.ID=this.id;
+    meta.Name=this.name;
+    meta.DisplayName=this.caption;
+    meta.DataType=this.fieldType;
+    meta.DataTypeName=this.fieldTypeName;
+    meta.DataLength=this.fieldLen;
+    meta.DataScale=this.fieldScal;
+    meta.RelateTable=this.relateTable;
+    meta.RelateField=this.relateField;
+    meta.Memo=this.comment;
+    meta.Not_Nullable=this.notNullable;
+    meta.KeyFieldType=this.extraKeyType;
+    meta.IndexType=this.indexType;
+    meta.FieldWeight=this.fieldWeight;
+    meta.GraphDesc=this.graphDesc;
+  }
+
+  public getFieldTypeStr(bPhy:boolean,bDesc:boolean){
     if(bPhy){
       if(!this.fieldDesc_phy)
-        this.fieldDesc_phy=this.getFieldTypeStrEx(bPhy);
+        this.fieldDesc_phy=this.getFieldTypeStrEx(bPhy,bDesc?'DESC':CurrentDmlDbEngine);
       return this.fieldDesc_phy;
     }
     else {
       if(!this.fieldDesc_logic)
-        this.fieldDesc_logic=this.getFieldTypeStrEx(bPhy);
+        this.fieldDesc_logic=this.getFieldTypeStrEx(bPhy,bDesc?'DESC':CurrentDmlDbEngine);
       return this.fieldDesc_logic;
     }
   }
 
-  private getFieldTypeStrEx(bPhy:boolean){
-    let Result;
+  public getFieldTypeStrEx(bPhy:boolean, dbe:string){
+    let Result='';
     switch (this.fieldType) {
       case DMLFieldType.cfdtObject:
       case DMLFieldType.cfdtList:
@@ -4029,7 +4581,7 @@ export class DmlField{
           Result = this.fieldTypeName;
         } else {
           if (bPhy) {
-            Result = GetDMLFieldPhyTypeName(CurrentDmlDbEngine, this.fieldType, this.fieldLen);
+            Result = GetDMLFieldPhyTypeName(dbe, this.fieldType, this.fieldLen);
           } else {
             Result = DML_LogicTypeNames[this.fieldType];
           }
@@ -4037,7 +4589,7 @@ export class DmlField{
         if (bPhy) {
           Result = Proc_CheckCustDataTypeReplaces(Result);
         }
-        return Result;
+        return Result||'';
     }
 
 
@@ -4045,12 +4597,12 @@ export class DmlField{
       if (this.fieldTypeName) {
         Result = this.fieldTypeName;
       } else {
-        Result = GetDMLFieldPhyTypeName(CurrentDmlDbEngine, this.fieldType, this.fieldLen);
+        Result = GetDMLFieldPhyTypeName(dbe, this.fieldType, this.fieldLen);
       }
       // return DML_PhyFieldTypeNames_Ora[FieldType];
       switch (this.fieldType) {
         case DMLFieldType.cfdtString:
-          let nres=Proc_CheckStringMaxLen(CurrentDmlDbEngine, this.fieldTypeName, Result, this.fieldLen);
+          let nres=Proc_CheckStringMaxLen(dbe, this.fieldTypeName, Result, this.fieldLen);
           if(nres)
             Result=nres;
           else {
@@ -4064,7 +4616,7 @@ export class DmlField{
         case DMLFieldType.cfdtInteger:
           if ((this.fieldLen > 0) && (this.fieldLen !== 10)) {
             Result = Result + '(' + this.fieldLen + ')';
-          } else if (CurrentDmlDbEngine === 'ORACLE') {
+          } else if (dbe === 'ORACLE') {
             if (Result === 'NUMBER') {
               Result = Result + '(10)';
             }
@@ -4092,25 +4644,19 @@ export class DmlField{
           break;
       }
       Result = Proc_CheckCustDataTypeReplaces(Result);
-      if (this.extraKeyType === DmlKeyType.cfktId) {
-        Result = Result + ' PK';
-      } else if (this.extraKeyType === DmlKeyType.cfktRid) {
-        Result = Result + ' FK';
+      if(dbe=='DESC'){
+        if (this.extraKeyType === DmlKeyType.cfktId) {
+          Result = Result + ' PK';
+        } else if (this.extraKeyType === DmlKeyType.cfktRid) {
+          Result = Result + ' FK';
+        }
       }
     } else {
       Result = DML_LogicTypeNames[this.fieldType];
-      if (this.extraKeyType === DmlKeyType.cfktId) {
-        if ((this.fieldType === DMLFieldType.cfdtInteger) && (this.fieldLen === 0)) {
-          Result = 'PK';
-          return Result;
-        } else {
+      if(dbe=='DESC'){
+        if (this.extraKeyType === DmlKeyType.cfktId) {
           Result = 'PK' + Result;
-        }
-      } else if (this.extraKeyType === DmlKeyType.cfktRid) {
-        if ((this.fieldType === DMLFieldType.cfdtInteger) && (this.fieldLen === 0)) {
-          Result = 'FK';
-          return Result;
-        } else {
+        } else if (this.extraKeyType === DmlKeyType.cfktRid) {
           Result = 'FK' + Result;
         }
       }
@@ -4153,9 +4699,323 @@ export class DmlField{
       }
 
     }
-    return Result;
+    return Result||'';
   }
 
+  public getConstraintStrEx(bWithKeys:boolean, bWithRelate:boolean){
+
+    const subGetConsStr = (ci: number): string => {
+      return DEF_CTMETAFIELD_CONSTRAINT_STR_CHN[ci];
+    };
+
+    const enccStr = (cs: string): string => {
+        let result = cs;
+        if (result.includes(',')) {
+            result = result.replace(/,/g, '#44#');
+        }
+        if (result.includes('>>')) {
+            result = result.replace(/>>/g, '#62##62#');
+        }
+        return result;
+    };
+
+    let s: string = '';
+
+    if (!bWithKeys) {
+        s = '';
+    } else if (this.extraKeyType === DmlKeyType.cfktId) {
+        s = subGetConsStr(2);
+    } else if (this.extraKeyType === DmlKeyType.cfktRid) {
+        s = subGetConsStr(3);
+    } else {
+        s = '';
+    }
+
+    if (bWithRelate && this.fieldTypeName) {
+        if (s) {
+            s += ',';
+        }
+        s += subGetConsStr(9) + ':' + enccStr(this.fieldTypeName);
+    }
+
+    if (this.indexType == DmlIndexType.cfitUnique) {
+        if (s) {
+            s += ',';
+        }
+        s += subGetConsStr(4);
+        if (this.fieldType == DMLFieldType.cfdtFunction && bWithRelate && this.metaData.IndexFields) {
+            s += ':' + enccStr(this.metaData.IndexFields);
+            return s;
+        }
+    } else if (this.indexType == DmlIndexType.cfitNormal) {
+        if (s) {
+            s += ',';
+        }
+        s += subGetConsStr(5);
+        if (this.fieldType == DMLFieldType.cfdtFunction && bWithRelate && this.metaData.IndexFields) {
+            s += ':' + enccStr(this.metaData.IndexFields);
+            return s;
+        }
+    }
+
+    if (this.notNullable && this.extraKeyType !== DmlKeyType.cfktId) {
+        if (s) {
+            s += ',';
+        }
+        s += subGetConsStr(1);
+    }
+
+    if (this.metaData.DefaultValue) {
+        if (s) {
+            s += ',';
+        }
+        if (this.metaData.DefaultValue.trim() === DEF_VAL_auto_increment) {
+            s += subGetConsStr(7);
+        } else {
+            s += subGetConsStr(6) + ':' + enccStr(this.metaData.DefaultValue);
+        }
+    }
+
+    if (bWithRelate && this.relateTable) {
+        if (s) {
+            s += ',';
+        }
+        s += subGetConsStr(8) + ':' + enccStr(this.relateTable);
+        if (this.relateField) {
+            s += '.' + enccStr(this.relateField);
+        }
+    }
+
+    return s;
+  }
+
+  public setConstraintStrEx(value:string, bForce:boolean){
+    const subFindConsStr = (ci: number, val: string): boolean => {
+        const t1 = ',' + DEF_CTMETAFIELD_CONSTRAINT_STR_ENG[ci] + ',';
+        const t2 = ',' + DEF_CTMETAFIELD_CONSTRAINT_STR_CHN[ci] + ',';
+        return val.includes(t1) || val.includes(t2);
+    };
+
+    const subFindConsVal = (ci: number, val: string): string => {
+        const t1 = ',' + DEF_CTMETAFIELD_CONSTRAINT_STR_ENG[ci].toLowerCase() + ':';
+        const t2 = ',' + DEF_CTMETAFIELD_CONSTRAINT_STR_CHN[ci].toLowerCase() + ':';
+        val = ',' + val.toLowerCase();
+
+        let po = val.indexOf(t1);
+        if (po >= 0) {
+            let result = val.slice(po + t1.length);
+            if (result === '') return '(NONE)';
+            po = result.indexOf(',');
+            if (po >= 0) result = result.slice(0, po);
+            return result;
+        }
+
+        po = val.indexOf(t2);
+        if (po >= 0) {
+            let result = val.slice(po + t2.length);
+            if (result === '') return '(NONE)';
+            po = result.indexOf(',');
+            if (po >= 0) result = result.slice(0, po);
+            return result;
+        }
+
+        return '';
+    };
+
+    const subGetDefaultVal = (val: string): string => {
+        const result = subFindConsVal(6, val);
+        if (result !== '') return result;
+        if (subFindConsStr(7, ',' + val + ',')) return DEF_VAL_auto_increment;
+        return '';
+    };
+
+    const getIndexFieldVals = (s: string): string => {
+        const po = s.indexOf(':');
+        if (po >= 0) return s.slice(po + 1).trim();
+        return '';
+    };
+
+    const deccStr = (cs: string): string => {
+        let result = cs;
+        if (result.includes('#44#')) result = result.replace(/#44#/g, ',');
+        if (result.includes('#62#')) result = result.replace(/#62#/g, '>');
+        return result;
+    };
+
+    let s = ',' + value + ',';
+    s = s.replace(/ /g, '').replace(/　/g, '').replace(/，/g, ',');
+
+    if (subFindConsStr(2, s)) {
+        this.extraKeyType = DmlKeyType.cfktId;
+    } else if (subFindConsStr(3, s)) {
+        this.extraKeyType = DmlKeyType.cfktRid;
+    } else if (bForce) {
+        this.extraKeyType = DmlKeyType.cfktNormal;
+    }
+
+    if (bForce) {
+        this.notNullable = subFindConsStr(1, s);
+    } else if (subFindConsStr(1, s)) {
+        this.notNullable = true;
+    }
+
+    let idxV = '';
+    if (this.fieldType === DMLFieldType.cfdtFunction) {
+        const svIdxes = this.metaData.IndexFields;
+        idxV = subFindConsVal(4, s);
+        if (idxV !== '') {
+            this.metaData.IndexType = 'cfitUnique';
+            this.metaData.IndexFields = deccStr(getIndexFieldVals(value));
+            if (svIdxes === this.comment) this.comment = this.metaData.IndexFields;
+        } else {
+            idxV = subFindConsVal(5, s);
+            if (idxV !== '') {
+                this.indexType = DmlIndexType.cfitNormal;
+                this.metaData.IndexFields = deccStr(getIndexFieldVals(value));
+                if (svIdxes === this.comment) this.comment = this.metaData.IndexFields;
+            }
+        }
+    }
+
+    if (idxV === '') {
+        if (subFindConsStr(4, s)) {
+            this.indexType = DmlIndexType.cfitUnique;
+        } else if (subFindConsStr(5, s)) {
+            this.indexType = DmlIndexType.cfitNormal;
+        } else if (bForce) {
+            this.indexType = DmlIndexType.cfitNone;
+        }
+    }
+
+    s = subGetDefaultVal(value);
+    if (s !== '' || bForce) {
+        if (s === '(NONE)') s = '';
+        this.metaData.DefaultValue = deccStr(s);
+    }
+
+    s = subFindConsVal(8, value);
+    if (s !== '' || bForce) {
+        if (s === '(NONE)') s = '';
+        const pdot = s.indexOf('.');
+        if (pdot >= 0) {
+            this.relateField = deccStr(s.slice(pdot + 1).trim());
+            s = s.slice(0, pdot);
+        }
+        this.relateTable = deccStr(s.trim());
+    }
+
+    s = subFindConsVal(9, value);
+    if (s !== '') {
+        if (s === '(NONE)') s = '';
+        s = deccStr(s.trim());
+        while (s.includes('> >')) {
+            s = s.replace('> >', '>>');
+        }
+        this.fieldTypeName = s;
+    }
+  }
+
+  getFieldDefaultValDesc(dbType: string = ''): string {
+    if (!this.metaData.DefaultValue) {
+        return '';
+    } else if (this.metaData.DefaultValue.trim() === DEF_VAL_auto_increment) {
+        switch (dbType) {
+            case 'SQLSERVER':
+                return ' identity(1, 1)';
+            case 'MYSQL':
+                return ' auto_increment';
+            case 'SQLITE':
+                return ' autoincrement';
+            default:
+                return ' /*auto_increment*/';
+        }
+    } else {
+        const lowerDefaultValue = this.metaData.DefaultValue.toLowerCase();
+        const dateFunctions = ['sysdate', 'sysdate()', 'getdate', 'getdate()', 'now', 'now()', 'current_timestamp()', 'current_timestamp'];
+
+        if (dateFunctions.includes(lowerDefaultValue)) {
+            switch (dbType) {
+                case 'ORACLE':
+                    return ' default sysdate';
+                case 'SQLSERVER':
+                    return ' default getdate()';
+                case 'MYSQL':
+                    return ' default current_timestamp';
+                case 'SQLITE':
+                    return ' default (datetime(current_timestamp, \'localtime\'))';
+                case 'POSTGRESQL':
+                    return ' default now()';
+                default:
+                    return ' default ' + this.metaData.DefaultValue;
+            }
+        } else if (lowerDefaultValue === 'empty_clob()' || lowerDefaultValue === 'empty_blob()') {
+            if (dbType === 'ORACLE') {
+                return ' default ' + this.metaData.DefaultValue;
+            } else {
+                return '';
+            }
+        } else {
+            return ' default ' + this.metaData.DefaultValue;
+        }
+    }
+  }
+
+  public genDemoData(ARowIndex: number, AOpt: string): string {
+    let S: string = this.caption || this.name;
+    let J: number = ARowIndex;
+    let vID: number = 0;
+    if(this.id) vID=parseInt(this.id);
+    else if(this.metaData.ID) vID=parseInt(this.metaData.ID);
+
+    if (J < 0) {
+        J = Math.floor(Math.random() * 100);
+    }
+    S += (J + 1).toString();
+
+    if (this.fieldType == DMLFieldType.cfdtDate) {
+        const now = new Date();
+        const date = new Date(now.setDate(now.getDate() - 20 + J + vID + Math.cos(J + now.getTime() / 100)));
+        S = formatDateTime(date);
+    } else if (this.fieldType == DMLFieldType.cfdtInteger) {
+        if (this.extraKeyType != DmlKeyType.cfktId) {
+            J = Math.round(Math.abs(Math.sin(ARowIndex + vID + Date.now() / 1000 * 123)) * 11779);
+        }
+        S = (J + 1).toString();
+    } else if (this.fieldType == DMLFieldType.cfdtEnum) {
+        J = Math.round(Math.abs(Math.sin(ARowIndex + vID + Date.now() / 1000 * 123)) * 11779);
+        S = (J % 5).toString();
+    } else if (this.fieldType == DMLFieldType.cfdtFloat) {
+        S = Math.abs(Math.sin(J + vID + Date.now() / 1000 * 120) * 100).toFixed(2);
+    } else if (this.fieldType == DMLFieldType.cfdtBool) {
+        if (Math.round(J + vID + Date.now() / 1000 * 130) % 3 === 0) {
+            S = '0';
+        } else {
+            S = '1';
+        }
+    }
+
+    return S;
+  }
+
+  public getSqlQuotValue(val: string, dbType: string){
+    let result: string = val;
+
+    switch (this.fieldType) {
+        case DMLFieldType.cfdtDate:
+            result = dbSqlStringToDateTime(result, dbType);
+            break;
+        case DMLFieldType.cfdtInteger:
+        case DMLFieldType.cfdtFloat:
+        case DMLFieldType.cfdtBool:
+        case DMLFieldType.cfdtEnum:
+            break;
+        default:
+            result = getDbQuotString(result, dbType);
+            break;
+    }
+
+    return result;
+  }
 }
 
 export class DmlTableObj extends DmlEntityObj{
@@ -4165,6 +5025,7 @@ export class DmlTableObj extends DmlEntityObj{
   private maxLogicTpLen = 0;
   private origDefWidth = 60;
   private fieldFocused:boolean=false;
+  private _captionFocused: boolean = false;
   
   public get selected()
   {
@@ -4176,7 +5037,44 @@ export class DmlTableObj extends DmlEntityObj{
 
     if(!value){
       this.clearFocusField();
+      this.captionFocused=false;
     }
+  }
+
+  public get realTableName(){
+    let res=this.name;
+    if(this.metaData && this.metaData.PhysicalName)
+      res=this.metaData.PhysicalName;
+    if(res) res=res.trim();
+    return res;
+  }
+
+  public isSeqNeeded(){
+    let pkc=0, ic=0;
+    this.fields.forEach(fd=>{
+      if(fd.isPhysicalField()){
+        if(fd.extraKeyType==DmlKeyType.cfktId){
+          pkc++;
+          if(fd.fieldType==DMLFieldType.cfdtInteger)
+            ic++;
+        }
+      }
+    });
+    if(pkc==1 && ic==1) return true;
+    else return false;
+  }
+  
+  public getTableComments(){
+    let result: string = this.comment;
+    if (result) {
+        if (this.name && this.caption && this.name !== this.caption && this.realTableName !== this.caption) {
+            result = this.caption + ' ' + result;
+        }
+    } else if (this.name !== this.caption && this.caption && this.caption !== this.realTableName) {
+        result = this.caption;
+    }
+
+    return result;
   }
 
   public clearFocusField(){
@@ -4191,8 +5089,502 @@ export class DmlTableObj extends DmlEntityObj{
       if(fd.name==fieldName){
         fd.fieldFocusMode=mode;
         this.fieldFocused=true;
+        this._captionFocused=false;
       }
     });
+  }
+
+  public getFieldFocused(){
+    let res=null;
+    this.fields.forEach(fd=>{
+      if(fd.fieldFocusMode==3){
+        res=fd;
+      }
+    });
+    return res;
+  }
+
+  public get captionFocused(): boolean {
+    return this._captionFocused;
+  }
+  public set captionFocused(value: boolean) {
+    this._captionFocused = value;
+    if(this._captionFocused)
+      this.clearFocusField();
+  }
+
+  protected checkDesName(nm:string) {
+    if(!nm) return nm;
+    let result = nm.trim();
+  
+    if (result.indexOf(' ') > -1) {
+        result = result.replace(/ /g, '#32');
+    }
+    if (result.indexOf('\t') > -1) {
+        result = result.replace(/\t/g, '#9');
+    }
+    if (result.indexOf('(') > -1) {
+        result = result.replace(/\(/g, '#40');
+    }
+    if (result.indexOf(')') > -1) {
+        result = result.replace(/\)/g, '#41');
+    }
+  
+    return result;
+  }
+  
+  protected getDesName(phy:string, nm:string){
+    phy=this.checkDesName(phy);
+    nm=this.checkDesName(nm);
+    var res=nm;
+    if(!res)
+      return phy;
+    else if(phy && res!=phy){
+      return phy+'('+res+')';
+    } else 
+      return phy+'('+res+')';
+  }
+
+  public get describe()
+  {
+    let res='';
+    var l=0;
+    this.fields.forEach(f=>{
+      var s = this.getDesName(f.name, f.caption);
+      var dl=dmLength(s);
+      if(l<dl)
+        l=dl;
+    });
+  
+    var lm=0;
+    this.fields.forEach(f=>{
+      var s = this.getDesName(f.name, f.caption);
+      s = extStr(s, l);
+      var ft=f.getFieldTypeStrEx(false,'DESC');
+      if(lm<dmLength(s+' '+ft))
+        lm=dmLength(s+' '+ft);
+      var T = f.comment||'';
+      if (f.fieldType == DMLFieldType.cfdtFunction)
+        if (f.comment == f.metaData.IndexFields)
+          T = '';
+      var CSTR = f.getConstraintStrEx(false, true);
+      if (CSTR){
+        CSTR = '<<' + CSTR + '>>';
+        T = CSTR + T;
+      }
+      if(T){
+        T = T.replace(/\\/g, '\\\\');
+        T = T.replace(/\r/g, '\\r');
+        T = T.replace(/\n/g, '\\n');
+        s = s + ' ' + extStr(ft, 11) + ' //' + T;  
+      } else{
+        s = s + ' ' + ft;
+      }
+      if(res) res+='\n';
+      res+=s;
+    });
+  
+    var s=this.name;
+    if(this.metaData.PhysicalName && this.metaData.PhysicalName!=this.name)
+      s+=':'+this.metaData.PhysicalName.trim();
+    s=this.getDesName(s,this.caption);
+    if(lm<dmLength(s))
+      lm=dmLength(s);
+    var T=extStr('-',lm,'-');
+    res=T+'\n'+res;
+    T=this.comment;
+    if(T){
+      T = T.replace(/\\/g, '\\\\');
+      T = T.replace(/\r/g, '\\r');
+      T = T.replace(/\n/g, '\\n');
+      res='//' + T+'\n'+res;
+    }
+    res=s+'\n'+res;
+    return res;
+  }
+
+  public set describe(value: string)
+  {
+    const infos: string[] = value.split('\n');
+    let li: number = 0;
+    let ln: string = '';
+
+    const getNextLine = (): boolean => {
+        ln='';
+        do {
+            if (li >= infos.length) break;
+            ln = infos[li].trim();
+            li++;
+        } while (li < infos.length && ln === '');
+        return ln !== '';
+    };
+
+    const getMemo = (aStr: string): string => {
+        aStr += '\r\n';
+        if (aStr.includes('//')) {
+            let result = extractCompStr(aStr, '//', '\r\n');
+            if(!result) return '';
+            result = result.replace(/\\n/g, '\n').replace(/\\r/g, '\r').replace(/\\\\/g, '\\');
+            return result;
+        } else
+          return '';
+    };
+
+    const checkDesName = (nm: string): string => {
+        let result: string = nm;
+        result = result.replace(/#32/g, ' ').replace(/#9/g, '\t').replace(/#40/g, '(').replace(/#41/g, ')');
+        return result;
+    };
+
+    const deleteMemo = (aStr: string): string => {
+        aStr += '\r\n';
+        while (aStr.includes('//')) {
+            aStr = addOrModifyCompStr(aStr, 'XXX', '//', '\r\n');
+            aStr = aStr.replace(/\/\/XXX\r\n/g, '');
+        }
+        return aStr.trim();
+    };
+
+    const setDesName = function(Des: string, Phy: string, Nam: string, Mem: string, Tp: string): any {
+        let vPhy: string, vNam: string, vMem: string, vTemp: string;
+        let po: number;
+    
+        vMem = getMemo(Des); // 获取注释
+        if (vMem.trim() !== '') {
+            Mem = vMem;
+        }
+        vNam='';
+        Des=deleteMemo(Des); // 删除注释
+    
+        Des = Des.replace(/;/g, ' ');
+        Des = Des.replace(/\t/g, ' ');
+        while (Des.indexOf('  ') > -1) {
+            Des = Des.replace(/  /g, ' ');
+        }
+    
+        vTemp = Des; // 获取逻辑名
+        po = vTemp.indexOf('(');
+        if (vTemp.indexOf(' ') > -1) {
+            if (po > vTemp.indexOf(' ')) {
+                po = -1;
+            }
+        }
+        if (po > -1) {
+            vTemp = vTemp.substring(0, po).trim();
+            if (vTemp.indexOf(' ') === -1) {
+                vNam = extractCompStr(Des, '(', ')');
+                if (vNam !== '') {
+                    Des = modifyCompStr(Des, 'XXX', '(', ')');
+                    Des = Des.replace('(XXX)', '');
+                }
+            }
+        } else {
+            vTemp = Des;
+            po = vTemp.indexOf('（');
+            if (po > -1) {
+                vTemp = vTemp.substring(0, po).trim();
+                if (vTemp.indexOf(' ') === -1) {
+                    vNam = extractCompStr(Des, '（', '）');
+                    if (vNam !== '') {
+                        Des = modifyCompStr(Des, 'XXX', '（', '）');
+                        Des = Des.replace('（XXX）', '');
+                    }
+                }
+            } else {
+                vTemp = Des;
+                po = vTemp.indexOf(' ');
+                if (po > -1) {
+                    vTemp = vTemp.substring(0, po).trim();
+                    vNam = extractCompStr(Des, ' ', ' ');
+                    if (vNam !== '') {
+                        Des = modifyCompStr(Des, 'XXX', ' ', ' ');
+                        Des = Des.replace(' XXX ', ' ').trim();
+                    }
+                }
+            }
+        }
+    
+        // 获取类型
+        Tp = extractCompStr(Des + '//', ' ', '//').trim();
+        if (Des.indexOf(' ') === -1) {
+            vPhy = Des;
+        } else {
+            vPhy = addOrModifyCompStr(Des + '//', 'XXX', ' ', '//');
+            vPhy = vPhy.replace(' XXX//', '');
+        }
+        vPhy = vPhy.trim();
+        if (vPhy === '') {
+            vPhy = vNam;
+            vNam = '';
+        }
+        vPhy = checkDesName(vPhy);
+        vNam = checkDesName(vNam);
+        if (Phy === Nam) {
+            Nam = '';
+        }
+        if (vPhy !== vNam) {
+            Nam = vNam;
+        }
+        if (vPhy !== '') {
+            Phy = vPhy;
+        }
+        return {Phy, Nam, Mem, Tp};
+    };
+
+    const setDesFieldType = function SetDesFieldType(f: DmlField, FT: string): void {
+      let bHasLen: boolean = false;
+      let vTpName: string = '';
+      let vFullName: string = FT;
+  
+      // 替换中文括号为英文括号
+      FT = FT.replace(/（/g, '(').replace(/）/g, ')');
+  
+      let po: number = FT.indexOf('(');
+      if (po > 0) {
+          bHasLen = true;
+          let vTemp: string = FT.slice(po + 1, FT.indexOf(')')).trim();
+          FT = FT.slice(0, po).trim();
+  
+          FT = FT.replace(/，/g, ',');
+          po = vTemp.indexOf(',');
+          if (po > 0) {
+              f.fieldLen = parseInt(vTemp.slice(0, po).trim()) || 0;
+              vTemp = vTemp.slice(po + 1).trim();
+              f.fieldScal = parseInt(vTemp) || 0;
+          } else {
+              f.fieldLen = parseInt(vTemp) || 0;
+              f.fieldScal = 0;
+          }
+      } else {
+          f.fieldLen = 0;
+          f.fieldScal = 0;
+      }
+  
+      if (FT.toUpperCase().startsWith('PK')) {
+          if (f.fieldType === DMLFieldType.cfdtUnknow) {
+              f.fieldType = DMLFieldType.cfdtInteger;
+          }
+          f.extraKeyType = DmlKeyType.cfktId;
+          if (FT.length > 2) {
+              FT = FT.slice(2);
+          } else {
+              return;
+          }
+  
+          if (FT.toUpperCase() === 'INC') {
+              FT = 'Integer';
+              f.fieldType = DMLFieldType.cfdtInteger;
+              f.metaData.DefaultValue = DEF_VAL_auto_increment;
+          }
+      } else if (FT.toUpperCase().startsWith('FK')) {
+          if (f.fieldType === DMLFieldType.cfdtUnknow) {
+              f.fieldType = DMLFieldType.cfdtInteger;
+          }
+          f.extraKeyType = DmlKeyType.cfktRid;
+          if (FT.length > 2) {
+              FT = FT.slice(2);
+          } else {
+              return;
+          }
+      } else if (f.extraKeyType === DmlKeyType.cfktId || f.extraKeyType === DmlKeyType.cfktRid) {
+          f.extraKeyType = DmlKeyType.cfktNormal;
+      }
+  
+      vFullName = FT;
+      po = FT.indexOf(':');
+      if (po > 0) {
+          vTpName = FT.slice(po + 1).trim();
+          FT = FT.slice(0, po).trim();
+      } else {
+          po = FT.indexOf('：');
+          if (po > 0) {
+              vTpName = FT.slice(po + 1).trim();
+              FT = FT.slice(0, po).trim();
+          }
+      }
+  
+      for (let II=0;II<14;II++) {
+          if (FT.toUpperCase() === DML_LogicTypeNames[II].toUpperCase()) {
+              f.fieldType = II as DMLFieldType;
+              if (vTpName !== '') {
+                  f.fieldTypeName = vTpName;
+              }
+              return;
+          }
+      }
+  
+      for (let II=0;II<14;II++) {
+        if (FT.toUpperCase() === DML_LogicTypeNamesCn[II].toUpperCase()) {
+            f.fieldType = II as DMLFieldType;
+            if (vTpName !== '') {
+                f.fieldTypeName = vTpName;
+            }
+            return;
+        }
+      }
+      
+      for (let II=0;II<14;II++) {
+        if (FT.toUpperCase() === DML_LogicTypeNamesA[II].toUpperCase()) {
+            f.fieldType = II as DMLFieldType;
+            if (vTpName !== '') {
+                f.fieldTypeName = vTpName;
+            }
+            return;
+        }
+      }
+  
+      FT = vFullName;
+      if (!f.caption && !bHasLen && getCtFieldDataTypeOfAliasEx(FT, false) == DMLFieldType.cfdtUnknow) {
+          f.caption = FT;
+      } else {
+          f.fieldType = getCtFieldDataTypeOfAliasEx(FT, false);
+          f.fieldTypeName = FT;
+      }
+    };
+
+    let vPhy: string = '';
+    let vNam: string = '';
+    let vMem: string = '';
+    let vTp: string = '';
+    let vCstr: string = '';
+    let j: number;
+    let po: number;
+    let cspo: number;
+    let bNewF: boolean;
+
+    if (!getNextLine()) return;
+    let s: string = ln;
+    if (!getNextLine()) return;
+    let t: string = ln;
+    if (t.startsWith('//')) {
+        if (!getNextLine()) return;
+        t = getMemo(t);
+        if (t.trim() !== '') this.comment = t;
+        t = ln;
+    }
+    if (t.startsWith('--')) {
+        let ft: string = '';
+        vPhy = '';
+        vNam = '';
+        vMem = '';
+        let res=setDesName(s, vPhy, vNam, vMem, ft);
+        vPhy=res.Phy;
+        this.caption=res.Nam;
+        this.comment=res.Mem;
+        ft=res.Tp;
+        po = vPhy.indexOf(':');
+        if (po > 0) {
+            this.name = vPhy.substring(0, po).trim();
+            this.metaData.PhysicalName = vPhy.substring(po + 1).trim();
+        } else {
+            this.name = vPhy;
+            this.metaData.PhysicalName = '';
+        }
+        if (this.caption === '' && ft !== '') this.caption = ft;
+    } else {
+        li = 0;
+    }
+
+    var fds=this.metaData.MetaFields.items as any[];
+    this.fields.forEach(f=>{
+      f.userData=null;
+    });
+
+    let iNo: number = 0;
+    while (getNextLine()) {
+        vPhy = '';
+        vNam = '';
+        vMem = '';
+        vTp = '';
+        let res=setDesName(ln, vPhy, vNam, vMem, vTp);
+        vPhy=res.Phy;
+        vNam=res.Nam;
+        vMem=res.Mem;
+        vTp=res.Tp;
+        if (vPhy === '') continue;
+
+        let f:DmlField|null = this.fieldByName(vPhy);
+        if (f === null) {
+            let f2=new DmlField();
+            let mt={
+              "Name": "_NewField"+fds.length+'_'+(new Date()).getTime(),
+              "DataType": 1
+            };
+            fds.push(mt);
+            f2.loadFromMeta(mt);
+            this.fields.push(f2);
+            f=f2;
+            bNewF = true;
+        } else {
+            bNewF = false;
+        }
+        f.name = vPhy;
+        f.caption = vNam;
+        setDesFieldType(f, vTp);
+        if (f.fieldType === DMLFieldType.cfdtUnknow && bNewF) f.fieldType = DMLFieldType.cfdtString;
+
+        if (vMem.startsWith('<<')) {
+            cspo = vMem.indexOf('>>');
+            if (cspo > 0) {
+                vCstr = vMem.substring(2, cspo);
+                vMem = vMem.substring(cspo + 2);
+                if (vCstr !== '') f.setConstraintStrEx(vCstr, false);
+                else f.setConstraintStrEx('', true);
+            }
+        }
+
+        if (vMem === '') {
+            if (f.fieldType === DMLFieldType.cfdtFunction && f.indexType !== DmlIndexType.cfitNone) vMem = f.metaData.IndexFields||'';
+        } else if (f.fieldType === DMLFieldType.cfdtFunction) {
+            if (f.indexType !== DmlIndexType.cfitNone && bNewF && f.metaData.IndexFields === '') f.metaData.IndexFields = vMem;
+        }
+        f.comment = vMem;
+
+        f.userData={found:true, index:iNo};
+        iNo++;
+    }
+
+    for (let i = this.fields.length - 1; i >= 0; i--) {
+        if (!this.fields[i].userData){
+          let mt=this.fields[i].metaData;
+          let idx=fds.indexOf(mt);
+          this.fields.splice(i,1);
+          if(idx>=0)
+            fds.splice(idx,1);
+        }
+    }
+    
+    if(this.fields.length != fds.length){
+      throw new Error(this.name+' DML field len '+this.fields.length+' diff from metaData '+fds.length);
+    }
+    let i=0;
+    while(i < this.fields.length) {
+      let f=this.fields[i];
+      if (f.userData){
+        let toI=f.userData.index;
+        if(toI>=0 && toI<this.fields.length && toI!=i){
+          let t = this.fields[toI];
+          this.fields[toI]=f;
+          this.fields[i]=t;
+
+          let mt=f.metaData;
+          let idx=fds.indexOf(mt);
+          if(idx>=0 && idx<fds.length && idx!=toI){
+            t = fds[toI];
+            fds[toI]=mt;
+            fds[idx]=t;
+          }
+          f.userData=null;
+          continue;
+        } else
+          f.userData=null;
+      }
+      i++;
+    }
+
+    //todo: 保存回metaTable
+    this.saveToMeta();
+
   }
 
   public loadFromMeta(meta: any){
@@ -4201,17 +5593,23 @@ export class DmlTableObj extends DmlEntityObj{
     if(meta.MetaFields && meta.MetaFields.items){
       var fds=meta.MetaFields.items as any[];
       fds.forEach(fd=>{
-        if(!fd.FieldWeight || fd.FieldWeight> -9){
-          let field=new DmlField();
-          field.loadFromMeta(fd);
-          this.fields.push(field);
-        }
+        let field=new DmlField();
+        field.loadFromMeta(fd);
+        this.fields.push(field);
       })
     }
   }
+  
+  public saveToMeta(meta: any=null){  
+    super.saveToMeta(meta);
+    if(!meta)
+      this.fields.forEach(f=>{
+        f.saveToMeta()
+      });
+  }
 
   public fieldByName(fieldName:string){
-    let res=null;
+    let res:DmlField|null=null;
     this.fields.some(field=>{
       if(field.name==fieldName){
         res=field;
@@ -4279,8 +5677,8 @@ export class DmlTableObj extends DmlEntityObj{
         this.maxLogicTpLen = l;
       }
   
-      let ftl = dmLength(f.getFieldTypeStr(true));
-      let k = dmLength(f.getFieldTypeStr(false));
+      let ftl = dmLength(f.getFieldTypeStr(true,true));
+      let k = dmLength(f.getFieldTypeStr(false,true));
       if (ftl < lgPhMaxLen) {
         ftl = lgPhMaxLen;
       }
@@ -4322,8 +5720,8 @@ export class DmlTableObj extends DmlEntityObj{
         this.width = Math.round(l * DML_FONTSC_FD);
       }
       this.fields.forEach(f=>{
-        let ftl = dmLength(f.getFieldTypeStr(true));
-        let k = dmLength(f.getFieldTypeStr(false));
+        let ftl = dmLength(f.getFieldTypeStr(true,true));
+        let k = dmLength(f.getFieldTypeStr(false,true));
         if (ftl < lgPhMaxLen) {
           ftl = lgPhMaxLen;
         }
@@ -4337,8 +5735,8 @@ export class DmlTableObj extends DmlEntityObj{
           ftl = FieldTypeMaxDrawSize;
         }
         l = this.maxFieldNameLen;
-        if (this.width < Math.round((l + ftl) * DML_FONTSC_FD) + 16 + 6) {
-          this.width = Math.round((l + ftl) * DML_FONTSC_FD) + 16 + 6;
+        if (this.width < Math.round((l + ftl) * DML_FONTSC_FD) + 16 + 6 + 5) {
+          this.width = Math.round((l + ftl) * DML_FONTSC_FD) + 16 + 6 + 5;
         }
       });
     }
@@ -4372,6 +5770,9 @@ export class DmlTableObj extends DmlEntityObj{
     if(this.briefMode){
       return;
     }
+    if(this._captionFocused && drawer.selectionList.length>1){
+      this.captionFocused=false;
+    }
     if(!this.pointInObj(x,y))
       return;
 
@@ -4380,6 +5781,26 @@ export class DmlTableObj extends DmlEntityObj{
     
     var rowh=this.rowHeight;
     let yy=this.top+rowh;
+    if(y<yy && drawer.selectionList.length==1){
+      let dd=drawer.contentToCanvasD(1);
+      let s=this.name;
+      if(this.hasCaption){
+        if(drawer._showPhyFieldName==1)
+          s=this.caption;
+        else if(drawer._showPhyFieldName==2)
+          s=this.nameCaption;
+      }
+      let len = dmLength(s);
+      let wd = len * DML_FONTSC_FD+3;
+      if(wd>this.width-4)
+        wd=this.width-4;
+      if(x>this.left+this.width/2-wd/2 && x<this.left+this.width/2+wd/2)
+      {
+        this.captionFocused=true;
+        return;
+      }
+    }
+    this.captionFocused=false;
     let idx=Math.floor((y-yy)/rowh);
     if(idx>=0 && idx<this.fields.length){
       let field=this.fields[idx];
@@ -4467,6 +5888,17 @@ export class DmlTableObj extends DmlEntityObj{
       else if(drawer._showPhyFieldName==2)
         s=this.nameCaption;
     }
+    if(this._captionFocused){
+      let dd=drawer.contentToCanvasD(1);
+      let len = dmLength(s);
+      let wd = len * DML_FONTSC_FD+3;
+      if(wd>this.width-4)
+        wd=this.width-4;
+      ctx.fillStyle=drawer.selectedColor;
+      wd=drawer.contentToCanvasD(wd);
+      ctx.fillRect(drawVal((rx1+rx2-wd)/2), drawVal(ry1+dd), Math.round(wd),  Math.round(rowh));
+      ctx.fillStyle=drawer.selectedForeColor;
+    }
     ctx.fillText(s, (rx1+rx2)/2, drawer.getY(yy-2));
 
     ctx.textAlign = "start";
@@ -4543,9 +5975,9 @@ export class DmlTableObj extends DmlEntityObj{
       ctx.fillStyle=txtColor;
       s='';
       if(drawer._showPhyFieldName==0)
-        s=field.getFieldTypeStr(true);
+        s=field.getFieldTypeStr(true,true);
       else if(drawer._showPhyFieldName==1)
-        s=field.getFieldTypeStr(false);
+        s=field.getFieldTypeStr(false,true);
       else if(field.hasCaption)
         s=field.caption;
       if(totalC>maxC && index==maxC-1)
@@ -4560,5 +5992,624 @@ export class DmlTableObj extends DmlEntityObj{
       fc++;
     });
   }
+
+  public getSpecKeyNames(keyType: DmlKeyType, dbType: string){
+    var res='';
+    this.fields.forEach(fd=>{
+      if(fd.isPhysicalField() && fd.extraKeyType==keyType){
+        if(res)res+=','
+        if(dbType) res+=getDbQuotName(fd.name, dbType);
+        else res+=fd.name;
+      }
+    });
+    return res;
+  }
+  public getPrimaryKeyNames(dbType: string){
+    return this.getSpecKeyNames(DmlKeyType.cfktId, dbType);
+  }
+
+  public genSqlEx(bCreatTb: boolean, bFK: boolean, dbType: string): string {
+        const Get_FieldTypeStrEE = (AField: DmlField): string => {
+            return AField.getFieldTypeStrEx(true, dbType);
+        };
+
+        const GetQuotName = (AName: string): string => {
+            return getDbQuotName(AName, dbType);
+        };
+
+        const GetQuotTbName = (AName: string): string => {
+            let result = getDbQuotName(AName, dbType);
+            if (this.metaData.OwnerCategory) {
+                result = this.metaData.OwnerCategory+'.'+result;
+            } else if (dbType === 'SQLSERVER') {
+                result = `dbo.${result}`;
+            }
+            return result;
+        };
+
+        const GetIndexPrefixInfo = (AField: DmlField): string => {
+            if (dbType === 'MYSQL' && AField.fieldType === DMLFieldType.cfdtString && AField.fieldLen > 255) {
+                return '(255)';
+            }
+            return '';
+        };
+
+        const IsNameOk = (AName: string): boolean => {
+            if (!bCreatTb) return true;
+            if (isReservedKeyworkd(AName)) return false;
+            for (let i = 0; i < AName.length; i++) {
+                const c = AName.charCodeAt(i);
+                if (c < 128) {
+                    if (c === 95) continue; // _
+                    if (c >= 48 && c <= 57) continue; // 0-9
+                    if (c >= 65 && c <= 90) continue; // A-Z
+                    if (c >= 97 && c <= 122) continue; // a-z
+                    return false;
+                }
+            }
+            return true;
+        };
+
+        let infos: string[] = [];
+        let T = '';
+        let pkAdded = false;
+
+        let S = this.realTableName;
+        if (!IsNameOk(S)) {
+            if (T !== '') T += '\n';
+            T += '警告: 字段名可能非法 - ' +S;
+        }
+
+        for (let I = 0; I < this.fields.length; I++) {
+          var fd=this.fields[I];
+            if (!fd.isPhysicalField()) continue;
+            S = fd.name;
+            if (!IsNameOk(S)) {
+                if (T !== '') T += '\n';
+                T += '警告: 字段名可能非法 - ' +S;
+            }
+
+            for (let J = I - 1; J >= 0; J--) {
+                if (S.toUpperCase() === this.fields[J].name.toUpperCase()) {
+                    if (T !== '') T += '\n';
+                    T += '警告: 字段名重复 - '+S;
+                }
+            }
+        }
+
+        if (T !== '') {
+            if (dbType === 'HIVE') {
+                const lines = T.split('\n').map(line => `-- ${line}`);
+                T = lines.join('\n');
+                infos.push(T.trim());
+            } else {
+                infos.push('/*');
+                infos.push(T);
+                infos.push('*/');
+            }
+        }
+
+        let vTbn = this.realTableName;
+        if (vTbn === '') vTbn = this.caption;
+        vTbn = GetQuotTbName(vTbn);
+
+        S = `create table ${vTbn}`;
+        if (dbType === 'SQLITE') {
+            S += `\n/**EZDML_DESC_START**\n${this.describe.trim()}\n**EZDML_DESC_END**/`;
+        }
+        S += '\n(';
+        if (bCreatTb) infos.push(S);
+
+        S = '';
+        let sComment = '';
+        let sPK = '';
+        let sFK = '';
+        let sIdx = '';
+        let sChk = '';
+        let sFdEx = '';
+        let C = 0;
+
+        T = this.getTableComments();
+        if (T !== '') {
+            if (dbType === 'ORACLE' || dbType === 'POSTGRESQL') {
+                if (sComment !== '') sComment += '\n';
+                sComment += `comment on table ${vTbn} is '${replaceSingleQuotmark(T)}';`;
+            } else if (dbType === 'SQLSERVER') {
+                if (sComment !== '') sComment += '\n';
+                sComment += `EXEC sp_addextendedproperty 'MS_Description', '${replaceSingleQuotmark(T)}', 'user', dbo, 'table', ${GetQuotName(this.realTableName)}, NULL, NULL;`;
+            } else if (dbType === 'MYSQL') {
+                // MySQL comments are added after the table creation
+            }
+        }
+
+        for (let I = 0; I < this.fields.length; I++) {
+            const f = this.fields[I];
+            if (!f.isPhysicalField()) continue;
+            C++;
+            if (C > 1) S += ',\n';
+            let sFPN = GetQuotName(f.name);
+            S += extStr(' ', 6) + extStr(sFPN, 16);
+            T = Get_FieldTypeStrEE(f);
+            S += ` ${T}`;
+            if (f.metaData.DefaultValue) {
+                S += f.getFieldDefaultValDesc(dbType);
+            }
+            const sNull = '';
+            if(f.notNullable)
+            S += ' not null';
+
+            T = f.comment;
+            if(!T) T=f.caption;
+            else if(f.name && f.caption && f.name!=f.caption && T.indexOf(f.caption)!=0)
+              T=f.caption+' '+T;
+            if (T !== '') {
+                if (dbType === 'MYSQL' || dbType === 'HIVE') {
+                    S += ` comment '${replaceSingleQuotmark(T)}'`;
+                } else {
+                    if (dbType === 'ORACLE' || dbType === 'POSTGRESQL') {
+                        if (sComment !== '') sComment += '\n';
+                        sComment += `comment on column ${vTbn}.${sFPN} is '${replaceSingleQuotmark(T)}';`;
+                    } else if (dbType === 'SQLSERVER') {
+                        if (sComment !== '') sComment += '\n';
+                        sComment += `EXEC sp_addextendedproperty 'MS_Description', '${replaceSingleQuotmark(T)}', 'user', dbo, 'table', ${GetQuotName(this.realTableName)}, 'column', ${sFPN};`;
+                    }
+                    if (dbType !== 'HIVE' && f.caption && f.caption !== f.name) {
+                        if (!f.notNullable && f.metaData.DefaultValue !== '' && sNull === '') {
+                            S += ' null';
+                        }
+                        S += `  /*${replaceSingleQuotmark(f.caption)}*/`;
+                    }
+                }
+            }
+
+            T = getIdxName(this.realTableName, f.name);
+            if (f.extraKeyType === DmlKeyType.cfktId) {
+                if (dbType === 'SQLITE') {
+                    if (f.metaData.DefaultValue && f.metaData.DefaultValue.trim() === DEF_VAL_auto_increment) {
+                        // SQLite primary key is defined directly in the field
+                    } else if (!pkAdded) {
+                        pkAdded = true;
+                        sFdEx += `,\n${' '.repeat(6)}constraint ${GetQuotName('PK_' + T)} primary key (${this.getPrimaryKeyNames(dbType)})`;
+                    }
+                } else if (dbType === 'MYSQL' && f.metaData.DefaultValue && f.metaData.DefaultValue.trim() === DEF_VAL_auto_increment) {
+                    // MySQL auto-increment primary key is defined directly in the field
+                } else if (!pkAdded) {
+                    pkAdded = true;
+                    if (sPK !== '') sPK += '\n';
+                    sPK += `alter table ${vTbn}\n       add constraint ${GetQuotName('PK_' + T)} primary key (${this.getPrimaryKeyNames(dbType)});`;
+                }
+                if (f.relateTable && f.relateField && !f.relateField.includes('{Link:') && G_CreateForeignkeys) {
+                        if (sFK !== '') sFK += '\n';
+                        sFK += `alter table ${vTbn}\n       add constraint ${GetQuotName('FK_' + T)} foreign key (${sFPN})\n       references ${GetQuotName(f.relateTableRealName)}(${GetQuotName(f.relateField)});`;
+                }
+            } else {
+                if (f.extraKeyType === DmlKeyType.cfktRid && f.relateTable && f.relateField  && !f.relateField.includes('{Link:') && G_CreateForeignkeys) {
+                    if (dbType === 'SQLITE') {
+                        sFdEx += `,\n${' '.repeat(6)}foreign key (${sFPN}${GetIndexPrefixInfo(f)}) references ${f.relateTableRealName}(${f.relateField})`;
+                    } else if (dbType === 'MYSQL' && f.metaData.DefaultValue && f.metaData.DefaultValue.trim() === DEF_VAL_auto_increment) {
+                        sFdEx += `,\n${' '.repeat(6)}constraint ${GetQuotName('IDU_' + T)} foreign key(${sFPN}${GetIndexPrefixInfo(f)}) references ${f.relateTableRealName}(${f.relateField})`;
+                    } else {
+                        if (sFK !== '') sFK += '\n';
+                        sFK += `alter table ${vTbn}\n       add constraint ${GetQuotName('FK_' + T)} foreign key (${sFPN})\n       references ${GetQuotName(f.relateTableRealName)}(${GetQuotName(f.relateField)});`;
+                    }
+                }
+                if (f.indexType === DmlIndexType.cfitUnique) {
+                    if (dbType === 'MYSQL' && f.metaData.DefaultValue && f.metaData.DefaultValue.trim() === DEF_VAL_auto_increment) {
+                        sFdEx += `,\n${' '.repeat(6)}UNIQUE ${GetQuotName('IDU_' + T)}(${sFPN}${GetIndexPrefixInfo(f)})`;
+                    } else if (dbType === 'HIVE') {
+                        if (sIdx !== '') sIdx += '\n';
+                        sIdx += `create index ${GetQuotName('IDU_' + T)} on table ${vTbn}(${sFPN}${GetIndexPrefixInfo(f)})\n as 'org.apache.hadoop.hive.ql.index.compact.CompactIndexHandler' with deferred rebuild;`;
+                        sIdx += `\nalter table ${vTbn} add constraint ${GetQuotName('UNQ_' + T)} unique (${sFPN}${GetIndexPrefixInfo(f)}) disable novalidate;`;
+                    } else {
+                        if (sIdx !== '') sIdx += '\n';
+                        sIdx += `create unique index ${GetQuotName('IDU_' + T)} on ${vTbn}(${sFPN}${GetIndexPrefixInfo(f)});`;
+                    }
+                } else if (f.indexType === DmlIndexType.cfitNormal) {
+                    if (sIdx !== '') sIdx += '\n';
+                    if (dbType === 'HIVE') {
+                        sIdx += `create index ${GetQuotName('IDU_' + T)} on table ${vTbn}(${sFPN}${GetIndexPrefixInfo(f)})\n as 'org.apache.hadoop.hive.ql.index.compact.CompactIndexHandler' with deferred rebuild;`;
+                    } else {
+                        sIdx += `create index ${GetQuotName('IDX_' + T)} on ${vTbn}(${sFPN}${GetIndexPrefixInfo(f)});`;
+                    }
+                } else if (f.extraKeyType === DmlKeyType.cfktRid && needGenFKIndexesSQL(this)) {
+                    if (sIdx !== '') sIdx += '\n';
+                    if (dbType === 'HIVE') {
+                        sIdx += `create index ${GetQuotName('IDU_' + T)} on table ${vTbn}(${sFPN}${GetIndexPrefixInfo(f)})\n as 'org.apache.hadoop.hive.ql.index.compact.CompactIndexHandler' with deferred rebuild;`;
+                    } else {
+                        sIdx += `create index ${GetQuotName('IDX_' + T)} on ${vTbn}(${sFPN}${GetIndexPrefixInfo(f)});`;
+                    }
+                }
+
+                if (f.metaData.DBCheck) {
+                    if (sChk !== '') sChk += '\n';
+                    sChk += `alter table ${vTbn}\n       add constraint ${GetQuotName('CHK_' + T)} check (${f.metaData.DBCheck});`;
+                }
+            }
+        }
+
+        // Multi-field indexes
+        for (let I = 0; I < this.fields.length; I++) {
+            const f = this.fields[I];
+            if (f.metaData.DataLevel === 4) continue;
+            if (f.fieldType !== DMLFieldType.cfdtFunction) continue;
+            if (f.indexType == DmlIndexType.cfitNone) continue;
+            if (!f.metaData.IndexFields || f.metaData.IndexFields.trim() === '') continue;
+            if (!f.metaData.IndexFields.includes(',') && !f.metaData.IndexFields.includes('(')) continue;
+            T = getIdxName(this.realTableName, f.name);
+            let sFPN = '';
+            if (f.metaData.IndexFields.includes('(')) {
+                sFPN = f.metaData.IndexFields;
+            } else {
+                const fns = f.metaData.IndexFields.split(',');
+                sFPN='';
+                for(var fi in fns){
+                  let fn=GetQuotName(fns[fi]);
+                  if(sFPN)sFPN+=','
+                  sFPN+=fn;
+                }
+            }
+            if (sFPN === '') continue;
+            if (dbType === 'HIVE') {
+                sIdx += `create index ${GetQuotName('IDX_' + T)} on table ${vTbn}(${sFPN})\n as 'org.apache.hadoop.hive.ql.index.compact.CompactIndexHandler' with deferred rebuild;`;
+            } else if (f.indexType === DmlIndexType.cfitUnique) {
+                if (sIdx !== '') sIdx += '\n';
+                sIdx += `create unique index ${GetQuotName('IDU_' + T)} on ${vTbn}(${sFPN});`;
+            } else if (f.indexType === DmlIndexType.cfitNormal) {
+                if (sIdx !== '') sIdx += '\n';
+                sIdx += `create index ${GetQuotName('IDX_' + T)} on ${vTbn}(${sFPN});`;
+            }
+        }
+
+        if (sFdEx !== '') S += sFdEx;
+
+        if (dbType === 'ORACLE') {
+            if (this.realTableName.startsWith('TT_')) {
+                S += '\n)\non commit delete rows;';
+            } else if (this.realTableName.startsWith('TS_')) {
+                S += '\n)\non commit preserve rows;';
+            } else {
+                S += '\n);';
+            }
+        } else if (dbType === 'MYSQL' || dbType === 'HIVE') {
+            T = this.getTableComments();
+            if (T !== '') {
+                S += `\n) comment '${replaceSingleQuotmark(T)}';`;
+            } else {
+                S += '\n);';
+            }
+        } else {
+            S += '\n);';
+        }
+        if (bCreatTb) infos.push(S);
+
+        if (bCreatTb) {
+            if (sPK !== '') infos.push(sPK);
+            if (sFK !== '' && bFK) infos.push(sFK);
+            if (sIdx !== '') infos.push(sIdx);
+            if (sChk !== '') infos.push(sChk);
+            if (sComment !== '') infos.push(sComment);
+            if (dbType === 'ORACLE' && G_CreateSeqForOracle && this.isSeqNeeded()) {
+                infos.push(`create sequence SEQ_${this.realTableName};`);
+            }
+            if (this.metaData.ExtraSQL) infos.push(this.metaData.ExtraSQL);
+            infos.push('');
+        } else if (bFK) {
+            infos.push(sFK);
+        }
+
+        return infos.join('\n');
+  }
+  
+  public genDqlDmlSql(dbType: string, sqlType: string): string {
+      const GetQuotName = (AName: string): string => {
+          return getDbQuotName(AName, dbType);
+      };
+
+      let I: number, C: number, exLen: number, aFC: number;
+      let vTbn: string, vFdn: string, S: string, sEnd: string;
+      const Infos: string[] = [];
+      let f: DmlField;
+
+      S = this.realTableName;
+      let fPk= this.getPrimaryKeyNames('');
+      if (!fPk || fPk.includes(',')) {
+          fPk = 'id';
+      }
+
+      vTbn = S;
+      if (vTbn === '') {
+          vTbn = this.caption;
+      }
+      vTbn = GetQuotName(vTbn);
+
+      exLen = 8;
+      for (I = 0; I < this.fields.length; I++) {
+          f = this.fields[I];
+          if (!f.isPhysicalField()) {
+              continue;
+          }
+          if (f.name.length > exLen) {
+              exLen = f.name.length;
+          }
+      }
+      if (exLen > 24) {
+          exLen = 24;
+      }
+
+      if (sqlType === '') {
+          sEnd = ';';
+      } else {
+          sEnd = '';
+      }
+
+      C = 0;
+      for (I = 0; I < this.fields.length; I++) {
+          f = this.fields[I];
+          if (!f.isPhysicalField()) {
+              continue;
+          }
+          C++;
+      }
+      aFC = C;
+
+      if (sqlType === '' || sqlType.indexOf('select') >= 0) {
+          Infos.push('select');
+          S = '';
+          C = 0;
+
+          for (I = 0; I < this.fields.length; I++) {
+              f = this.fields[I];
+              if (!f.isPhysicalField()) {
+                  continue;
+              }
+              C++;
+              if (C > 1) {
+                  S += ',\n';
+              }
+              vFdn = GetQuotName(f.name);
+              if (f.caption && f.caption !== f.name) {
+                  S += '  ' + extStr(vFdn, exLen);
+                  S += ' as ' + GetQuotName(f.caption);
+              } else {
+                  S += '  ' + vFdn;
+              }
+          }
+          Infos.push(S);
+          Infos.push('from ' + vTbn + ' t' + sEnd);
+          Infos.push('');
+      }
+
+      if (sqlType === '' || sqlType.indexOf('insert') >= 0) {
+          Infos.push('insert into ' + vTbn);
+          Infos.push('(');
+          S = '';
+          C = 0;
+          for (I = 0; I < this.fields.length; I++) {
+              f = this.fields[I];
+              if (!f.isPhysicalField()) {
+                  continue;
+              }
+              C++;
+              if (C > 1) {
+                  S += ',\n';
+              }
+              vFdn = GetQuotName(f.name);
+              S += '  ' + vFdn;
+          }
+          Infos.push(S);
+          Infos.push(')');
+          Infos.push('values(');
+          S = '';
+          C = 0;
+          for (I = 0; I < this.fields.length; I++) {
+              f = this.fields[I];
+              if (!f.isPhysicalField()) {
+                  continue;
+              }
+              C++;
+              vFdn = f.name;
+              if (dbType === 'HIVE') {
+                  S += '  :v_' + extStr(vFdn + ',', exLen) + ' --' + vFdn + '\n';
+              } else if (C === aFC) {
+                  S += '  :v_' + extStr(vFdn, exLen) + ' /*' + vFdn + '*/';
+              } else {
+                  S += '  :v_' + extStr(vFdn + ',', exLen) + ' /*' + vFdn + '*/\n';
+              }
+          }
+          Infos.push(S);
+          Infos.push(')' + sEnd);
+          Infos.push('');
+      }
+
+      if (sqlType === '' || sqlType.indexOf('insert_value') >= 0) {
+          Infos.push('insert into ' + vTbn);
+          Infos.push('(');
+          S = '';
+          C = 0;
+          for (I = 0; I < this.fields.length; I++) {
+              f = this.fields[I];
+              if (!f.isPhysicalField()) {
+                  continue;
+              }
+              C++;
+              if (C > 1) {
+                  S += ',\n';
+              }
+              vFdn = GetQuotName(f.name);
+              S += '  ' + vFdn;
+          }
+          Infos.push(S);
+          Infos.push(')');
+          Infos.push('values(');
+          S = '';
+          C = 0;
+          for (I = 0; I < this.fields.length; I++) {
+              f = this.fields[I];
+              if (!f.isPhysicalField()) {
+                  continue;
+              }
+              C++;
+
+              if (f.isFK() && !f.notNullable) {
+                  vFdn = 'null';
+              } else if (f.fieldType == DMLFieldType.cfdtBlob) {
+                  vFdn = 'null';
+              } else {
+                  vFdn = f.genDemoData(1, '[VALUE_ONLY]');
+                  vFdn = f.getSqlQuotValue(vFdn, dbType);
+              }
+
+              if (dbType === 'HIVE') {
+                  S += '  ' + extStr(vFdn + ',', exLen) + ' --' + f.name + '\n';
+              } else if (C === aFC) {
+                  S += '  ' + extStr(vFdn, exLen) + ' /*' + f.name + '*/';
+              } else {
+                  S += '  ' + extStr(vFdn + ',', exLen) + ' /*' + f.name + '*/\n';
+              }
+          }
+          Infos.push(S);
+          Infos.push(')' + sEnd);
+
+          Infos.push('');
+      }
+
+      if (sqlType === '' || sqlType.indexOf('update') >= 0) {
+          Infos.push('update ' + vTbn);
+          Infos.push('set');
+          S = '';
+          C = 0;
+          for (I = 0; I < this.fields.length; I++) {
+              f = this.fields[I];
+              if (!f.isPhysicalField()) {
+                  continue;
+              }
+              C++;
+              if (C > 1) {
+                  S += ',\n';
+              }
+              vFdn = GetQuotName(f.name);
+              S += '  ' + extStr(vFdn, exLen);
+              S += ' = :v_' + vFdn;
+          }
+          Infos.push(S);
+          S = fPk;
+          Infos.push('where ' + S + ' = :v_' + S + sEnd);
+
+          Infos.push('');
+      }
+
+      if (sqlType === '' || sqlType.indexOf('delete') >= 0) {
+          Infos.push('delete from ' + vTbn);
+          Infos.push('where ' + S + ' = :v_' + S + sEnd);
+      }
+
+      if (dbType === 'ORACLE' && sqlType === '') {
+          Infos.push('');
+          Infos.push('-- PL/SQL Test --');
+          Infos.push('');
+          Infos.push('declare');
+          for (I = 0; I < this.fields.length; I++) {
+              f = this.fields[I];
+              if (!f.isPhysicalField()) {
+                  continue;
+              }
+              vFdn = f.name;
+              Infos.push('  v_' + extStr(vFdn, exLen) + '  ' +
+                  f.getFieldTypeStrEx(true, 'ORACLE') + ';');
+          }
+          Infos.push('begin');
+          Infos.push('  select');
+          C = 0;
+          for (I = 0; I < this.fields.length; I++) {
+              f = this.fields[I];
+              if (!f.isPhysicalField()) {
+                  continue;
+              }
+              C++;
+              vFdn = f.name;
+              if (C === aFC) {
+                  Infos.push('    ' + vFdn);
+              } else {
+                  Infos.push('    ' + vFdn + ',');
+              }
+          }
+          Infos.push('  into');
+          C = 0;
+          for (I = 0; I < this.fields.length; I++) {
+              f = this.fields[I];
+              if (!f.isPhysicalField()) {
+                  continue;
+              }
+              C++;
+              vFdn = f.name;
+              if (C === aFC) {
+                  Infos.push('    v_' + vFdn);
+              } else {
+                  Infos.push('    v_' + vFdn + ',');
+              }
+          }
+          Infos.push('  from ' + vTbn);
+          if (fPk) {
+              Infos.push('  where ' + fPk + ' = :p_' + fPk + ';');
+          } else {
+              Infos.push('  where xxx=xxx;');
+          }
+          Infos.push('end;');
+
+      }
+      return Infos.join('\n');
+  }
+
+  public execCmd(cmd:string, par1:string, par2:string, opt:any){
+    if(cmd=='GetDescribe')
+      return this.describe;
+    if(cmd=='SetDescribe'){
+      this.describe=par1;
+      if(par2 && par2.indexOf('[GenFieldConstraintDescs]')>=0){
+        this.fields.forEach(fd=>{
+          fd.metaData._EZRESERVED_ConstraintDesc=fd.getConstraintStrEx(true, false);
+        })
+      }
+      return 'ok';
+    }
+    if(cmd=='GenFieldConstraintDescs'){
+      this.fields.forEach(fd=>{
+        fd.metaData._EZRESERVED_ConstraintDesc=fd.getConstraintStrEx(true, false);
+      })
+      return 'ok';
+    }
+    if(cmd=='SetFieldConstraintDesc'){
+      var f=this.fieldByName(par1);
+      if(f){
+        var fd=(f as DmlField);
+        fd.setConstraintStrEx(par2,true);
+        fd.saveToMeta();
+        fd.metaData._EZRESERVED_ConstraintDesc=fd.getConstraintStrEx(true, false);
+      }
+    }
+  }
+
   
 }
+
+export function createDmlObjFromMetaData(meta:any){
+  let obj;
+  if(meta.TypeName=='GROUP')
+    obj=new DmlGroupBox();
+  else if(meta.TypeName=='TEXT')
+    obj=new DmlTextObj();
+  else
+    obj=new DmlTableObj();
+  obj.loadFromMeta(meta);
+  return obj;
+}
+
+export function callDmlMetaObjCmd(meta:any, cmd:string, par1:string, par2:string, opt:any){
+  if(!meta) return null;
+  let obj=createDmlObjFromMetaData(meta);
+  if(!obj)
+    return null;
+  return obj.execCmd(cmd,par1,par2,opt)
+}
+
+registerTbSQLGens();

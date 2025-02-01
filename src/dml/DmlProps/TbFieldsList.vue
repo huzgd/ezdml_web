@@ -3,26 +3,31 @@
     <span>字段: 共{{metaFields.length}}个&nbsp;&nbsp;</span>
     <el-button-group>
       <el-button size="small" @click="newField">添加</el-button>
+      <el-button size="small" @click="editField" :disabled="!currentRow">编辑</el-button>
       <el-button size="small" @click="delFields" :disabled="selectedRows.length==0">删除</el-button>
       <el-button size="small" @click="moveUp" :disabled="selectedRows.length==0">上移</el-button>
       <el-button size="small" @click="moveDn" :disabled="selectedRows.length==0">下移</el-button>
     </el-button-group>
     
-    <el-button size="small" @click="genCode" style="margin-left: 4px;">生成SQL</el-button>
   </div>
+  <div ref="tbDivRef">
   <el-table
     :data="metaFields"
     border
     stripe
+    ref="tableRef"
     :max-height="maxGridHeight"
+    :highlight-current-row="true"
     :header-cell-style="{padding: '2px'}"
     :cell-style="{padding: '0'}"
     :scrollbar-always-on="true"
     :row-class-name="tableRowClassName"
     @cell-dblclick="handleCellDblClick"
     @cell-click="handleCellClick"
+    @current-change="handleCurrentChange"
     @selection-change="handleSelectionChange"
     @header-click="handelHeaderClick"
+    style="--el-table-current-row-bg-color: #d9ecff;--el-table-row-hover-bg-color:#ecf5ff;"
     >
     <el-table-column
       type="selection"
@@ -63,26 +68,36 @@
       label="数据类型"
       min-width="120" >
       <template #default="scope">
-        <select class="pcell_input" v-model="scope.row.DataType">
-          <option v-for="(item,index) in fieldTypeNames" :value="index">{{item}}</option>
+        <select class="pcell_input" v-model="scope.row.DataType" filterable allow-create>
+          <option v-for="(item,index) in DML_LogicTypeNamesCn" :value="index">{{item}}</option>
         </select>
-        <div class="pcell_txt">{{fieldTypeNames[scope.row.DataType]}}</div>
+        <div class="pcell_txt">{{DML_LogicTypeNamesCn[scope.row.DataType]}}</div>
       </template>
     </el-table-column>
 
     <el-table-column
-      prop="DefaultValue"
-      label="缺省值"
+      prop="DataSize"
+      label="长度"
+      min-width="90" >
+      <template #default="scope">
+        <input class="pcell_input" :value="getFieldLenStr(scope.row)" @change="event => onFieldLenStrChange(scope.row,event.target.value)"/>
+        <div class="pcell_txt">{{getFieldLenStr(scope.row)}}</div>
+      </template>
+    </el-table-column>
+
+    <el-table-column
+      prop="_EZRESERVED_ConstraintDesc"
+      label="约束"
       min-width="118" >
       <template #default="scope">
-        <input class="pcell_input" v-model="scope.row.DefaultValue"/>
-        <div class="pcell_txt">{{scope.row.DefaultValue}}</div>
+        <input class="pcell_input" v-model="scope.row._EZRESERVED_ConstraintDesc" list="_field_constrain_opts" @change="onFieldContraintChange(scope.row)"/>
+        <div class="pcell_txt">{{scope.row._EZRESERVED_ConstraintDesc}}</div>
       </template>
     </el-table-column>
 
     <el-table-column
       prop="Memo"
-      label="备注"
+      label="说明"
       min-width="219" >
       <template #default="scope">
         <input class="pcell_input" v-model="scope.row.Memo"/>
@@ -91,6 +106,18 @@
     </el-table-column>
 
   </el-table>
+  </div>
+  <datalist id="_field_constrain_opts">
+    <option value="非空"/>
+    <option value="主键"/>
+    <option value="外键"/>
+    <option value="唯一索引"/>
+    <option value="普通索引"/>
+    <option value="缺省值:"/>
+    <option value="主键,自增长"/>
+    <option value="外键,普通索引"/>
+  </datalist>
+  <FieldPropDialog ref="refFieldPropDlg" :dmlData="dmlData" :metaTable="metaTable" :metaField="curPropField"/>
 </template>
 
 <script setup>
@@ -98,6 +125,8 @@
 import {reactive, shallowReactive, watch, ref, onMounted, nextTick, useAttrs} from 'vue'
 import {newFieldTmpl} from '../Templates/NewTable.js'
 import {cloneMap} from '../DmlData'
+import FieldPropDialog from './FieldPropDialog.vue'
+import {callDmlMetaObjCmd, DML_LogicTypeNamesCn} from '../DmlGraph/DmlObjs'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
 const props=defineProps({
@@ -116,9 +145,83 @@ const props=defineProps({
 
 const dmlData=props.dmlData;
 
+const tableRef=ref(null);
+const tbDivRef=ref(null);
 const maxGridHeight=ref(200);
 const selectedRows=ref([]);
 const metaFields=ref([]);
+const curPropField=ref(null);
+const refFieldPropDlg=ref(null);
+
+const currentRow = ref(null);
+const handleCurrentChange = (val) => {
+  currentRow.value = val
+}
+
+onMounted(()=>{
+  if(props.metaTable && props.metaTable.MetaFields && props.metaTable.MetaFields.items){
+    setTimeout(()=>{
+      if(props.metaTable._EZRESERVED_FOCUS_FIELD && tableRef.value){
+        let ff=props.metaTable._EZRESERVED_FOCUS_FIELD;
+        props.metaTable.MetaFields.items.some((fd,index)=>{
+          if(fd.Name==ff){
+            tableRef.value.setCurrentRow(fd);
+            let mc=5;
+            if(tbDivRef.value){
+              let h=tbDivRef.value.offsetHeight;
+              if(h>100)
+                mc=(h-50)/25;
+            }
+            if(index>=mc){
+              tableRef.value.setScrollTop((index-mc+1)*25);
+            }
+            return true;
+          }
+        });
+      }
+    }, 200)
+  }
+})
+
+const getFieldLenStr=(field)=>{
+  if(!field) return '';
+  var res='';
+  if(field.DataLength>0){
+    if(field.DataScale>0)
+      return field.DataLength+','+field.DataScale;
+    else
+      return field.DataLength+'';
+  } else
+    return '';
+}
+
+const genFieldConstraintDescs=()=>{
+  callDmlMetaObjCmd(props.metaTable, 'GenFieldConstraintDescs');
+}
+const onFieldContraintChange=(field)=>{
+  if(field._EZRESERVED_ConstraintDesc=='缺省值:')
+    return;
+  callDmlMetaObjCmd(props.metaTable,'SetFieldConstraintDesc',field.Name,field._EZRESERVED_ConstraintDesc);
+}
+const onFieldLenStrChange=(field,val)=>{
+  val=val.trim();
+  if(val===''){
+    field.DataLength=0;
+    field.DataScale=0;
+    return;
+  }
+  let po=val.indexOf(',');
+  if(po>0){
+    let s=val.substring(po+1).trim();
+    val=val.substring(0,po).trim();
+    if(s)
+    field.DataScale=parseInt(s);
+    field.DataLength=parseInt(val);
+  } else {
+    field.DataLength=parseInt(val);
+    field.DataScale=0;
+  }
+}
 
 const checkMetaFields=()=>{
   if(props.metaTable && props.metaTable.MetaFields && props.metaTable.MetaFields.items)
@@ -133,6 +236,8 @@ const checkMetaFields=()=>{
     if(maxGridHeight.value<200)
       maxGridHeight.value=200;
   }
+
+  genFieldConstraintDescs();
 }
 checkMetaFields();
 watch(()=>props.metaTable, checkMetaFields);
@@ -178,20 +283,6 @@ const getIcoPosition=(row)=>{
   return '0 '+y+'px';
 }
 
-const fieldTypeNames=['Unknow',
-'String',
-'Integer',
-'Float',
-'Date',
-'Bool',
-'Enum',
-'Blob',
-'Object',
-'Calculate',
-'List',
-'Function',
-'Event',
-'Other'];
 
 var lastClickRow=null;
 var lastCell=null;
@@ -203,6 +294,12 @@ function hideEditor(){
   }
 }
 const handleCellDblClick= (row, column, cell, event) => {
+  if(column.className=="icon-col"){
+    curPropField.value=row;
+    if(refFieldPropDlg.value)
+      refFieldPropDlg.value.showDialog();
+    return;
+  }
   editMode=true;
   handleCellClick(row, column, cell, event);
 }
@@ -267,6 +364,18 @@ const newField=()=>{
   if(fd.DisplayName)
     fd.DisplayName=fd.DisplayName+'_'+metaFields.value.length;
 }
+
+const editField=()=>{
+  hideEditor();
+  if(!currentRow.value)
+    return;
+  let sel=currentRow.value;
+  let idx=getRowIndex(sel);
+  curPropField.value=metaFields.value[idx];
+  if(refFieldPropDlg.value)
+    refFieldPropDlg.value.showDialog();
+}
+
 const delFields=()=>{
   hideEditor();
   let len=selectedRows.value.length;
@@ -288,6 +397,8 @@ const delFields=()=>{
 const delFieldsEx=()=>{
   let sels=selectedRows.value;
   for(var i=sels.length-1;i>=0;i--){
+    if(currentRow.value && currentRow.value.Name==sels[i].Name)
+      currentRow.value=null;
     let idx=getRowIndex(sels[i]);
     if(idx>=0){
       metaFields.value.splice(idx,1);
@@ -349,22 +460,6 @@ const moveDn=()=>{
     fds.splice(idx,1);
     fds.splice(idx+1,0,fd);
   }
-}
-
-function genCode(){
-  ElMessageBox.confirm(
-    'EZDML Web版的生成SQL和代码的功能仍在开发完善中。EZDML桌面版与WEB版使用完全一致的文件格式，同时可以共享剪贴板数据，支持连接数据库比对表结构，提供完备的SQL和代码生成功能，更多功能请使用EZDML桌面版。',
-    '生成',
-    {
-      confirmButtonText: '下载桌面版',
-      cancelButtonText: '确定',
-      type: 'info',
-    }
-  )
-    .then(() => {
-      _execCmd('menu_action','openEzdmlDownload');
-    })
-    .catch(()=>{});
 }
 
 </script>

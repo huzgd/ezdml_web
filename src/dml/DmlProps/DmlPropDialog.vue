@@ -2,6 +2,7 @@
 <div>
   <el-dialog
     v-model="showPropDialog"
+    top="10vh"
     :title="tmpTable.Name+((tmpTable.Caption && tmpTable.Caption!=tmpTable.Name)?' ('+tmpTable.Caption+')':'')"
     :width="dmlData.mobilePhoneMode?'90%':'62%'"
     draggable
@@ -60,7 +61,7 @@
 import { ref, onMounted, onBeforeUnmount, useAttrs} from 'vue'
 import TableProp from './TableProp.vue'
 import LinkProp from './LinkProp.vue'
-import { cloneMap, syncTbInfo, processDmlDataEvent} from '../DmlData'
+import { cloneMap, syncTbInfo, processDmlDataEvent, getUnusedTableName} from '../DmlData'
 import {newTableTmpl,newTextTmpl,newGroupBoxTmpl} from '../Templates/NewTable.js'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
@@ -93,9 +94,11 @@ const newTable=(tp)=>{
   showTableProp(tb);
 }
 
-const showTableProp=(tb)=>{
+const showTableProp=(tb,focusField)=>{
   curPropTable=tb;
   oldTbCopy=cloneMap(tb);
+  if(focusField)
+    oldTbCopy._EZRESERVED_FOCUS_FIELD=focusField;
   oldTbCopy.MetaFields.items.forEach(fd=>{
     fd._EZRESERVED_ORD_NAME=fd.Name;
   });
@@ -103,14 +106,28 @@ const showTableProp=(tb)=>{
   showPropDialog.value=true;
 };
 
+const prepareSaveTb=(tb)=>{
+  if(!tb)
+    return;
+  var res=cloneMap(tb);
+  var fds=res.MetaFields.items;
+  if(!fds) return;
+  fds.forEach(fd=>{
+    fd._EZRESERVED_ConstraintDesc='';
+    delete fd._EZRESERVED_ConstraintDesc;
+  });
+  return res;
+}
+
 const saveTableProp=()=>{
-  let tmp=tmpTable.value;
+  let tmp=prepareSaveTb(tmpTable.value);
   
   if(oldTbCopy){
     let s=JSON.stringify(tmp);
     if(s!=JSON.stringify(oldTbCopy) || tmp._EZRESERVED_ISNEW){
       syncTbInfo(tmp, curPropTable);
       if(curPropTable._EZRESERVED_ISNEW){
+        curPropTable.Name=getUnusedTableName(dmlData,curPropTable.Name);
         _execCmd('addDmlTable',curPropTable);
       } else {
         if(oldTbCopy.Name != curPropTable.Name || oldTbCopy.Caption != curPropTable.Caption){
@@ -129,8 +146,10 @@ const cancelTableProp=()=>{
 };
 const checkCanClosePropDlg=(done)=>{
   if(oldTbCopy){
-    let s=JSON.stringify(tmpTable.value);
-    if(s!=JSON.stringify(oldTbCopy)){
+    let tmp=prepareSaveTb(tmpTable.value);
+    let s=JSON.stringify(tmp);
+    let s2=JSON.stringify(oldTbCopy);
+    if(s!=s2){
       ElMessageBox.confirm(
         '将丢失已修改的内容，仍然要关闭吗?',
         '关闭窗口',
@@ -220,7 +239,7 @@ onBeforeUnmount(()=>{
 
 const dmlShare_EventLsr=(evt,par1,par2)=>{
   if(evt=='showTablePropDialog'){
-    showTableProp(par1);
+    showTableProp(par1,par2);
   }
   if(evt=='showLinkPropDialog'){
     showLinkProp(par1);

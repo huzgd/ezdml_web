@@ -3,7 +3,7 @@
   <el-dialog
     v-model="showShareDialog"
     title="分享"
-    width="600px"
+    :width="dmlData.mobilePhoneMode?'90%':'600px'"
     draggable
     overflow
   >

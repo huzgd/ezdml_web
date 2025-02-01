@@ -9,7 +9,7 @@ import { ref, onMounted, onBeforeUnmount, useAttrs, watch, nextTick, markRaw } f
 import RightClickMenu from "../RightClickMenu/index.vue"
 import { Plus, Close, Edit, RefreshLeft} from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import {cloneMap} from '../DmlData'
+import {cloneMap, checkNewModelName} from '../DmlData'
 
 const dmlData = useAttrs()['dmlData'] || {};
 
@@ -70,6 +70,7 @@ const showDmlContextMenu=(event)=>{
       }
     }, 100);
   } else {
+    pasteTxt='$prompt';
     showDmlContextMenuEx(event, pasteTxt);
   }
 }
@@ -110,6 +111,13 @@ const showDmlContextMenuEx=(event, pasteTxt)=>{
          newTable();
       }
    }, {
+      //icon: markRaw(Connection),
+      name: "添加连接",
+      disabled: !(selC==selTbC && selC==2),
+      click: () => {
+        _emitEvent('newLinkDialog');
+      }
+   }, {
       //icon: markRaw(CollectionTag),
       name: "添加文字",
       click: () => {
@@ -121,13 +129,6 @@ const showDmlContextMenuEx=(event, pasteTxt)=>{
   //     click: () => {
   //       newTable('GROUP');
   //     }
-   }, {
-      //icon: markRaw(Connection),
-      name: "新建连接",
-      disabled: !(selC==selTbC && selC==2),
-      click: () => {
-        _emitEvent('newLinkDialog');
-      }
    }, {
       icon: markRaw(RefreshLeft),
       name: "重置大小和连线",
@@ -156,7 +157,19 @@ const showDmlContextMenuEx=(event, pasteTxt)=>{
         let tbs=_execCmd('getDmlSelectedTableMetaList');
         if(tbs){
           let md={RootName: "Tables", Count:tbs.length, items:tbs};
-          navigator.clipboard.writeText(JSON.stringify(md,null,2))
+          if(navigator && navigator.clipboard){
+            navigator.clipboard.writeText(JSON.stringify(md,null,2));
+            ElMessage('已复制预览内容到剪贴板');
+          } else {
+            ElMessageBox.prompt('程序无法访问剪贴板，请全选并按CTRL+C复制以下内容：', '复制', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              inputType: 'textarea',
+              inputValue: JSON.stringify(md,null,2)
+            })
+            .catch(() => {
+            });
+          }
         }
       }
    }, {
@@ -185,7 +198,7 @@ const showDmlContextMenuEx=(event, pasteTxt)=>{
 
 function pasteTbs(pasteTxt, asCopies){
   if(pasteTxt=='$prompt'){
-    ElMessageBox.prompt('请将内容粘贴到这里：', asCopies?'粘贴为副本':'粘贴', {
+    ElMessageBox.prompt('程序无法直接访问剪贴板，请按CTRL+V将内容粘贴到这里：', asCopies?'粘贴为副本':'粘贴', {
       confirmButtonText: '确定',
       cancelButtonText: '取消',
       inputType: 'textarea',
@@ -340,6 +353,7 @@ const newModelEx=(name)=>{
   });
   dmlData.content.items.push(md);
   md.Name=name;
+  checkNewModelName(dmlData, md);
   _emitEvent('newModel', md,null);
   dmlData.curModelName=md.Name;
 }

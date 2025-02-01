@@ -1,5 +1,5 @@
 
-import { valEqs, DmlObj, DmlDrawer, DmlEntityObj, DmlLinkObj } from './DmlObjs'
+import { valEqs, DmlObj, DmlDrawer, DmlEntityObj, DmlLinkObj, DmlTableObj, DmlField } from './DmlObjs'
 import { getDmlIconList } from '../DmlData/DmlIcons'
 
 enum DmlMouseDragAction{
@@ -223,6 +223,17 @@ export class DmlCanvas extends DmlDrawer {
         return obj.metaData;
       }
     }
+    if(cmd=='getDmlSelectedField'){
+      let obj=this.selectedTable();
+      if(obj){
+        if(obj instanceof DmlTableObj){
+          let tb=obj as DmlTableObj;
+          let fd=tb.getFieldFocused();
+          if(fd) return (fd as DmlField).metaData;
+        }
+        return null;
+      }
+    }
     if(cmd=='getDmlSelectedLink'){
       let obj=this.selectedLink();
       if(obj){
@@ -239,9 +250,14 @@ export class DmlCanvas extends DmlDrawer {
       let oName=par2.Name;
       let obj=this.getObjByName(oName);
       if(obj){
-        let dobj=(obj as DmlObj);
+        let dobj=(obj as DmlEntityObj);
         dobj.loadFromMeta(par1);
         dobj.checkResize();
+        if(oName!=par1.Name){
+          var tbMap=this.dmlTables as any;
+          delete tbMap[oName];
+          tbMap[dobj.name]=dobj;
+        }
         this.redraw();
       }
       return true;
